@@ -36,6 +36,7 @@ class CustomerController extends Controller {
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
                     'name' => 'required|string|max:255',
+                    'cus_type'=> 'required|not_in:0',
                     'email' => 'required|string|email|max:255|unique:customers',
                     'gender' => 'required|not_in:0',
                     'nic' => 'required|unique:customers',
@@ -48,13 +49,16 @@ class CustomerController extends Controller {
         }
         $customer = new Customer();
         $customer->customer_name = $request->get('name');
+        $customer->customer_type = $request->get('cus_type');
         $customer->email = $request->get('email');
         $customer->nic = $request->get('nic');
-        $customer->telephone = $request->get('telephone');
+        $customer->mobile_no = $request->get('telephone');
         $customer->gender = $request->get('gender');
         $customer->address = $request->get('address');
+        $customer->credit_limit_availability = $request->get('chk_status');
+        $customer->credit_amount = $request->get('credit_limit');
         $customer->save();
-        return redirect()->back()->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
+        return redirect('view_customers')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
     }
 
     /**
@@ -124,10 +128,11 @@ class CustomerController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $customer = Customer::find($id);
-        $customer->con_status = 1;
-        $customer->save();
-        return redirect()->back()->with('message', 'IT WORKS!');
+//        $customer = Customer::find($id);
+//        $customer->con_status = 1;
+//        $customer->save();
+        Customer::find($id)->delete();
+        return redirect()->route('view_customer')->with('success', 'RECORD HAS BEEN SUCCESSFULLY DELETED!');
     }
 
 }

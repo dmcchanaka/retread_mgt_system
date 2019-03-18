@@ -14,7 +14,14 @@ class CreateTyresTable extends Migration
     public function up()
     {
         Schema::create('tyres', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('tyre_id');
+            $table->string('tyre_name');
+            $table->string('tyre_size');
+
+            $table->unsignedInteger('manufac_id');
+            $table->foreign('manufac_id')->references('manufac_id')->on('manufactures');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

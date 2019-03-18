@@ -55,34 +55,21 @@ class UserController extends Controller {
         $user->password = Hash::make($request->get('password'));
         $user->u_tp_id = $request->get('user_type');
         $user->save();
-        return redirect()->back()->with('message', 'User Has been added successfully!');
+        return redirect('view_users')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response 
      */
     public function user_view() {
-        $users = DB::table('users')
-                ->join('user_types', 'users.u_tp_id', '=', 'user_types.id')
-                ->select('users.*', 'user_types.user_type')
-                ->where('users.u_tp_id', '!=', 1)
-                ->get();
+        $users = User::with('userTypes')->where('users.u_tp_id', '!=', 1)->get();
         return view('users.view_users', ['users' => $users]);
     }
     
     public function edit_user($id) {
-//        $result = DB::table('users')
-//                ->join('user_types', 'users.u_tp_id', '=', 'user_types.id')
-//                ->select('users.*', 'user_types.user_type')
-//                ->where('users.id', '=', $request->item_id)
-//                ->get();
-//        return $result;
-//        $users = \App\User::find($id);
-//        return view('users.edit_users', compact('users','id'));
-        
         $users = User::find($id);
         return view('users.edit_users', ['user' => $users]);
     }
@@ -133,7 +120,7 @@ class UserController extends Controller {
         $user->password = Hash::make($request->get('password'));
         $user->u_tp_id = $request->get('u_type');
         $user->save();
-        return redirect()->route('view_users');
+        return redirect('view_users')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
     }
 
     /**
@@ -143,10 +130,12 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $user = User::find($id);
-        $user->user_status = 1;
-        $user->save();
-        return redirect()->back()->with('message', 'IT WORKS!');
+        // $user = User::find($id);
+        // $user->user_status = 1;
+        // $user->save();
+        User::find($id)->delete();
+        return redirect()->route('view_users')->with('success', 'RECORD HAS BEEN SUCCESSFULLY DELETED!');
     }
+    
 
 }

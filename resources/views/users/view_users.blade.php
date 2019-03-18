@@ -26,7 +26,17 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>User Information<small></small></h2>
+                    <div class="col-md-3 offset-md-3"></div>
+                    <div class="col-md-3 offset-md-3"></div>
+                    <div class="col-md-3 offset-md-3"></div>
+                    <div>
+                    
+                    <button type="button" class="btn">
+                    <a href="{{url('users')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New User</a>
+                    </button>
+                    </div>
                     <div class="clearfix"></div>
+                    @include('flash-message')
                 </div>
                 <div class="x_content">
                     <?php
@@ -40,7 +50,6 @@
                                     <th style="text-align: center">NIC</th>
                                     <th style="text-align: center">Mobile No</th>
                                     <th style="text-align: center">Address</th>
-                                    <th style="text-align: center">Status</th>
                                     <th style="text-align: center">Edit</th>
                                     <th style="text-align: center">Delete</th>
                                 </tr>
@@ -48,20 +57,13 @@
                             <tbody>
                                 <?php
                                 foreach ($users as $user) {
-                                    $u_status = "";
-                                    if ($user->user_status == 0) {
-                                        $u_status = "Active";
-                                    } else {
-                                        $u_status = "Delete";
-                                    }
                                     ?>
                                     <tr>
-                                        <td><?php echo $user->name; ?></td>
-                                        <td><?php echo $user->user_type; ?></td>
-                                        <td><?php echo $user->nic; ?></td>
-                                        <td><?php echo $user->mobile_no; ?></td>
-                                        <td><?php echo $user->address; ?></td>
-                                        <td style="text-align: center"><?php if ($user->user_status == 0) { ?><span style="color: green;"><?php echo $u_status; ?></span><?php }else{ ?><span style="color: red;"><?php echo $u_status; ?></span><?php } ?></td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{$user->userTypes->user_type}}</td>
+                                        <td>{{$user->nic}}</td>
+                                        <td>{{$user->mobile_no}}</td>
+                                        <td>{{$user->address}}</td>
                                         <td style="text-align: center;cursor: pointer">
                                             <span class="pull-right-container">
                                                 <a href="{{url('get_userdetails', $user->id)}}"><i class="glyphicon glyphicon-pencil"></i></a>

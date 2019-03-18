@@ -2,52 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Belt_price;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
+use App\Tyre;
+use App\Belt_category;
+use App\Belt_subcategory;
 
-class Belt_priceController extends Controller {
+class Belt_priceController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('prices.price_register');
     }
 
-    public function search_products(Request $request) {
+    public function search_products(Request $request)
+    {
         $term = $request->term;
-        $tyres = DB::table('tyres')
-                ->select('name AS label', 'id AS id')
-                ->where('name', 'LIKE', '%' . $term . '%')
-                ->get();
-        return $tyres;
+        // $tyres = DB::table('tyres')
+        //     ->select('tyre_name AS label', 'tyre_id AS id')
+        //     ->where('tyre_name', 'LIKE', '%' . $term . '%')
+        //     ->get();
+        //     return $tyres;
+
+            $tyres = Tyre::select('tyre_name AS label', 'tyre_id AS id')
+            ->where('tyre_name', 'LIKE', '%' . $term . '%')
+            ->get();
+            return $tyres;
+
+
+            // $tyres->transform(function ($tyres, $key) {
+            //     return [
+            //         'label'=>$tyres->tyre_name,
+            //         'id'=>$tyres->tyre_id
+            //     ];
+            // });
     }
 
-    public static function get_category(Request $request) {
-        $category = DB::table('belt_categories')
-                ->select('id AS cat_id', 'cat_name AS cat_name')
-                ->where('tyre_id', '=', $request->tyre_id)
-                ->get();
+    public static function get_category(Request $request)
+    {
+        // $category = DB::table('belt_categories')
+        //     ->select('id AS cat_id', 'cat_name AS cat_name')
+        //     ->where('tyre_id', '=', $request->tyre_id)
+        //     ->get();
+        $category = Belt_category::all();
         return $category;
     }
 
-    public static function get_subcategory(Request $request) {
-        $sub_category = DB::table('belt_subcategories')
-                ->select('id AS sub_cat_id', 'sub_cat_name AS sub_cat_name')
-                ->where('cat_id', '=', $request->cat_id)
-                ->where('tyre_id', '=', $request->tyre_id)
-                ->get();
+    public static function get_subcategory(Request $request)
+    {
+        // $sub_category = DB::table('belt_subcategories')
+        //     ->select('id AS sub_cat_id', 'sub_cat_name AS sub_cat_name')
+        //     ->where('cat_id', '=', $request->cat_id)
+        //     ->where('tyre_id', '=', $request->tyre_id)
+        //     ->get();
+        $sub_category = Belt_subcategory::select('sub_cat_id AS sub_cat_id', 'sub_cat_name AS sub_cat_name')
+            ->where('cat_id', '=', $request->cat_id)
+            ->get();
         return $sub_category;
     }
 
-    public static function gen_beltno() {
-        $belt_price = DB::table('belt_prices')
-                ->where('price_status', '=', 0)
-                ->count();
+    public static function gen_beltno()
+    {
+        // $belt_price = DB::table('belt_prices')
+        //     ->where('price_status', '=', 0)
+        //     ->count();
+            $belt_price = Belt_price::get()   
+            ->count();
         return $belt_price;
     }
 
@@ -56,14 +84,16 @@ class Belt_priceController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        $belt_prices = DB::table('belt_prices AS b')
-                    ->join('belt_subcategories AS bsc', 'bsc.id', '=', 'b.sub_cat_id')
-                    ->join('belt_categories AS bc', 'bc.id', '=', 'bsc.cat_id')
-                    ->join('tyres AS t', 't.id', '=', 'bc.tyre_id')
-                    ->select('b.*', 'bsc.sub_cat_name AS sub_cat_name', 'bc.cat_name AS cat_name', 't.name AS tyre_name')
-                    ->where('b.price_status', '=', 0)
-                    ->get();
+    public function create()
+    {
+        // $belt_prices = DB::table('belt_prices AS b')
+        //             ->join('belt_subcategories AS bsc', 'bsc.id', '=', 'b.sub_cat_id')
+        //             ->join('belt_categories AS bc', 'bc.id', '=', 'bsc.cat_id')
+        //             ->join('tyres AS t', 't.id', '=', 'bc.tyre_id')
+        //             ->select('b.*', 'bsc.sub_cat_name AS sub_cat_name', 'bc.cat_name AS cat_name', 't.name AS tyre_name')
+        //             ->where('b.price_status', '=', 0)
+        //             ->get();
+        $belt_prices = Belt_price::with('tyre','category','subcategory')->get();
         return view('prices.view_prices', ['prices' => $belt_prices]);
     }
 
@@ -73,7 +103,8 @@ class Belt_priceController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // Begin Transaction
         DB::beginTransaction();
         try {
@@ -85,12 +116,12 @@ class Belt_priceController extends Controller {
             }
             // Commit Transaction
             DB::commit();
-            return redirect()->back()->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
+            return redirect()->route('view_prices')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
         } catch (\Exception $e) {
             // Rollback Transaction
             dd($e);
             DB::rollback();
-            return redirect()->back()->with('error', 'RECORD HAS NOT BEEN SUCCESSFULLY INSERTED!');
+            return redirect()->route('view_prices')->with('error', 'RECORD HAS NOT BEEN SUCCESSFULLY INSERTED!');
         }
     }
 
@@ -100,7 +131,8 @@ class Belt_priceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
 //
     }
 
@@ -110,7 +142,8 @@ class Belt_priceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
 //
     }
 
@@ -121,7 +154,8 @@ class Belt_priceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 //
     }
 
@@ -131,7 +165,8 @@ class Belt_priceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
 //
     }
 

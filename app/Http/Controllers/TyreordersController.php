@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Belt_price;
+use App\Customer;
+use App\Tyre_orders;
+use App\TyreOrderProduct;
+use PDF;
 
 class TyreordersController extends Controller
 {
@@ -25,7 +30,8 @@ class TyreordersController extends Controller
      */
     public function create()
     {
-        //
+        $orders = Tyre_orders::with('customer','order_product')->get();
+        return view('tyre_orders.view_orders',['orders'=>$orders]);
     }
 
     /**
@@ -36,7 +42,56 @@ class TyreordersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {   
+                $added_user = Auth::user()->id;
+                if($request->item_count > 0 && isset($request->item_count)){
+                $discount_amt = round((str_replace(',', '', $request->tot_amount) /100) * str_replace(',', '', $request->whole_dis),2);
+                $salesOrder = Tyre_orders::create([
+                    'order_no'=>$request->order_no,
+                    'cus_id'=>$request->cus_id,
+                    'order_amount'=>str_replace(',', '', $request->tot_amount),
+                    'discount'=>str_replace(',', '', $discount_amt),
+                    'discount_per'=>str_replace(',', '', $request->whole_dis),
+                    'complete_status'=>'0',
+                    'added_by'=>$added_user
+                ]); 
+                
+                $lastOrder = Tyre_orders::select('order_id')
+                ->latest()
+                ->first();
+                for($i=1; $i <= $request->item_count; $i++){
+                    $line_amt = ($request['qty_'.$i] * $request['price_'.$i]);
+                    $orderProduct = TyreOrderProduct::create([
+                        'order_id'=>$lastOrder->order_id,
+                        'tyre_id'=>$request['tyre_id_'.$i],
+                        'price_id'=>$request['price_no_'.$i],
+                        'discount'=>0,
+                        'discount_per'=>$request['discount_'.$i],
+                        'qty'=>$request['qty_'.$i],
+                        'line_amount'=>str_replace(',', '',$line_amt)
+                    ]);
+                }
+            }
+            DB::commit();
+            return redirect()->route('view_orders')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('view_orders')->with('error', 'RECORD HAS NOT BEEN SUCCESSFULLY INSERTED!');
+        }
+    }
+    
+    public function get_order_details($id){
+        $order = Tyre_orders::with('customer')->find($id);
+        $orderDetails = TyreOrderProduct::with('tyre', 'price')->where('order_id', '=', $id)->get();
+        return view('tyre_orders.display_order', ['orderDetails' => $orderDetails, 'order'=>$order]);
+    }
+    
+    public function print_order($id){
+        $order = Tyre_orders::with('customer')->find($id);
+        $pdf = PDF::loadView('tyre_orders.print_order',compact('order'));
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('invoice.pdf');
     }
 
     /**
@@ -47,7 +102,7 @@ class TyreordersController extends Controller
      */
     public function show($id)
     {
-        //
+       //
     }
 
     /**
@@ -81,40 +136,43 @@ class TyreordersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Tyre_orders::find($id)->delete();
+        return redirect()->route('view_orders')->with('success', 'RECORD HAS BEEN SUCCESSFULLY DELETED!');
     }
-    
-    public function gen_order_no() {
-        $order_no = DB::table('tyre_orders')
-                    ->count();
+
+    public function gen_order_no()
+    {
+        $order_no = Tyre_orders::count();
         return $order_no;
     }
-    
-    public static function search_customers(Request $request) {
+
+    public static function search_customers(Request $request)
+    {
         $term = $request->term;
-        $customers = DB::table('customers')
-                ->select('customer_name AS label', 'id AS id')
-                ->where('customer_name', 'LIKE', '%' . $term . '%')
-                ->where('con_status', '=' , 0)
-                ->get();
+        $customers = Customer::select('customer_name AS label', 'cus_id AS id')
+            ->where('customer_name', 'LIKE', '%' . $term . '%')
+            ->get();
         return $customers;
     }
-    
-    public static function get_batchno (Request $request){
-        $price_no = DB::table('belt_prices')
-                ->select('id AS price_id', 'price_no AS price_no')
-                ->where('sub_cat_id', '=', $request->sub_cat_id)
-                ->where('price_status', '=', 0)
-                ->get();
+
+    public static function get_batchno(Request $request)
+    {
+        $data = [
+            'sub_cat_id' => $request->sub_cat_id,
+            'cat_id' => $request->cat_id,
+            'tyre_id' => $request->tyre_id,
+        ];
+        $price_no = Belt_price::select('price_id AS price_id', 'price_no AS price_no')
+            ->where($data)
+            ->get();
         return $price_no;
     }
-    
-    public static function get_cus_prices (Request $request){
-        $price = DB::table('belt_prices')
-                ->select('cus_price AS cus_price')
-                ->where('id', '=', $request->batch_id)
-                ->where('price_status', '=', 0)
-                ->get();
+
+    public static function get_cus_prices(Request $request)
+    {
+        $price = Belt_price::select('cus_price AS cus_price')
+            ->where('price_id', '=', $request->batch_id)
+            ->get();
         return $price;
     }
 }

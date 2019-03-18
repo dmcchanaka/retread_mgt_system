@@ -27,7 +27,6 @@
                     <h2>TYRE Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
-                @include('flash-message')
                 <div class="x_content">
                     <br />
                     <form id="demo-form2" action="{{url('add_tyres')}}" method="post" class="form-horizontal form-label-left">

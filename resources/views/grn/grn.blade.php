@@ -7,7 +7,7 @@
 <div class="row">
     <div class="page-title">
         <div class="title_left">
-            <h3>TYRE Order Management</h3>
+            <h3>GRN Management</h3>
         </div>
 
         <div class="title_right">
@@ -15,25 +15,30 @@
                 <div class="input-group">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Order Management</a></li>
+                        <li><a href="#">GRN</a></li>
                         <li class="active">Registration</li>
                     </ol>
                 </div>
             </div>
         </div>
+        
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>TYRE Order Information</h2>
+                    <h2>GRN Information</h2>
                     <div class="clearfix"></div>
                 </div>
                 @include('flash-message')
+                
                 <div class="x_content">
                     <div class="x_panel">
-                        <form class="form-horizontal form-label-left" action="{{url('add_salesorder')}}" method="post" name="order_form" id="order_form" onsubmit="tyre_order_validation();">
+                           
+                        <form class="form-horizontal form-label-left" action="{{url('add_grn')}}" method="post" name="order_form" id="order_form" onsubmit="tyre_order_validation();">
                             @csrf
-                            <div class="row profile_details text-center">
-                                <div class="well profile_view">
+                            
+                            <div class="row">
+                                    <div class="col-md-9 col-xs-9">
+                                <div class="form-horizontal form-label-left">
                                     <div class="form-group">
                                         <label class="control-label col-md-5" for="">DATE. <span class="required"></span>
                                         </label>
@@ -43,22 +48,22 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-5" for="">ORDER NO. <span class="required"></span>
+                                        <label class="control-label col-md-5" for="">GRN NO. <span class="required"></span>
                                         </label>
                                         <div class="col-md-6">
                                             <input type="text" id="o_no" required="required" class="form-control col-md-2 col-xs-10" readonly="true">
-                                            <input type="hidden" id="order_no" name="order_no" value="" />
+                                            <input type="hidden" id="grn_no" name="grn_no" value="" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-5" for="">CUSTOMER <span class="required"></span>
+                                        <label class="control-label col-md-5" for="">INVOICE NO. <span class="required"></span>
                                         </label>
                                         <div class="col-md-6">
-                                            <input type="text" id="cus_name" required="required" class="form-control col-md-2 col-xs-10" onkeyup="load_customers();">
-                                            <input type="hidden" id="cus_id" name="cus_id" />
+                                            <input type="text" id="inv_no" name="inv_no" required="required" class="form-control col-md-2 col-xs-10">
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped jambo_table bulk_action" id="price_table">
@@ -73,7 +78,6 @@
                                             <th class="column-title">Price No. </th>
                                             <th class="column-title">Price. </th>
                                             <th class="column-title">Quantity </th>
-                                            <th class="column-title">Discount (%)</th>
                                             <th class="column-title">Amount</th>
                                             <th>
                                                 &nbsp;
@@ -106,7 +110,6 @@
                                             </td>
                                             <td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="price_1" name="price_1" /></td>
                                             <td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="qty_1" name="qty_1" onkeyup="check_qty(event, '1');" /></td>
-                                            <td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="discount_1" name="discount_1" onkeyup="calc_amount();" /></td>
                                             <td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="amount_1" name="amount_1" /></td>
                                             <td class="a-center ">
                                                 <span class="glyphicon glyphicon-minus" style="cursor: pointer" onclick="remove_item('1');"></span>
@@ -122,38 +125,9 @@
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td style="padding-top: 20px;text-align: right">Gross Amount</td>
+                                            <td style="padding-top: 20px;text-align: right">Total Amount</td>
                                             <td colspan="1" style="text-align: right;padding-right: 5px">
                                                 <input type="text" style="text-align: right;padding-right: 5px" id="tot_amount" name="tot_amount" value="0" >
-                                            </td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td style="padding-top: 20px;text-align: right">Discount (%)</td>
-                                            <td colspan="1" style="text-align: right;padding-right: 5px">
-                                                <input type="text" style="text-align: right;padding-right: 5px" id="whole_dis" name="whole_dis" onkeyup="calc_amount();" value="0" >
-                                            </td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td style="padding-top: 20px;text-align: right">Net Amount</td>
-                                            <td colspan="1" style="text-align: right;padding-right: 5px">
-                                                <input type="text" style="text-align: right;padding-right: 5px" id="net_amount" name="net_amount" value="0" >
                                             </td>
                                             <td>&nbsp;</td>
                                         </tr>
@@ -186,7 +160,7 @@
                                                         });
                                                         $.ajax({
                                                             type: "GET",
-                                                            url: '/orders/generate_no',
+                                                            url: '/grn/generate_no',
                                                             data: {
                                                             },
                                                             success: function (data) {
@@ -197,9 +171,9 @@
                                                                 } else {
                                                                     var next_no = +data + +1;
                                                                 }
-                                                                var order_no = price_no('TYRE/ORDER', next_no);
+                                                                var order_no = price_no('GRN', next_no);
                                                                 $('#o_no').val(order_no);
-                                                                $('#order_no').val(order_no);
+                                                                $('#grn_no').val(order_no);
                                                             }
                                                         });
                                                         function price_no(str1, str2) {
@@ -207,17 +181,6 @@
                                                             return res;
                                                         }
                                                     });
-                                                    /*GET TYRE NAMES*/
-                                                    function load_customers() {
-                                                        $("#cus_name").autocomplete({
-                                                            source: '/orders/customers',
-                                                            minLength: 1,
-                                                            select: function (event, ui) {
-                                                                $("#cus_name").val(ui.item.label);
-                                                                $("#cus_id").val(ui.item.id);
-                                                            }
-                                                        });
-                                                    }
                                                     /*GENERATE NEW ROWS*/
                                                     function gen_item() {
                                                         var num = parseFloat($('#item_count').val()) + 1;
@@ -245,7 +208,6 @@
                                                                 + '</td>'
                                                                 + '<td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="price_' + num + '" name="price_' + num + '" /></td>'
                                                                 + '<td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="qty_' + num + '" name="qty_' + num + '" onkeyup="check_qty(event, ' + num + ');" /></td>'
-                                                                + '<td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="discount_' + num + '" name="discount_' + num + '" onkeyup="calc_amount();" /></td>'
                                                                 + '<td class=" "><input type="text" style="text-align: right;padding-right: 5px" class="col-md-12" id="amount_' + num + '" name="amount_' + num + '" /></td>'
                                                                 + '<td class="a-center "><span class="glyphicon glyphicon-minus" style="cursor: pointer" onclick="remove_item(' + num + ');"></span></td>'
                                                                 + '</tr>');
@@ -261,7 +223,6 @@
                                                     }
                                                     /*GET TYRE NAMES*/
                                                     function load_tyres(num) {
-                                                        if ($('#cus_name').text() != "" || $('#cus_id').val() != '') {
                                                             $("#tyre_names_" + num).autocomplete({
                                                                 source: '/tyres/find',
                                                                 minLength: 1,
@@ -271,10 +232,6 @@
                                                                     load_categories(num, ui.item.id);
                                                                 }
                                                             });
-                                                        } else {
-                                                            alert('please select customer');
-                                                            $('#cus_name').focus();
-                                                        }
                                                     }
                                                     /*LOAD TYRE CATEGORIES*/
                                                     function load_categories(num, tyre_id) {
@@ -441,18 +398,11 @@
                                                         var tot_amount = 0;
                                                         for (i = 1; i <= parseFloat($('#item_count').val()); i++) {
                                                             var discount = 0;
-                                                            if ((!$('#discount_' + i).val().match(/^\d+(\.\d{0,1})?$/) || parseFloat($('#discount_' + i).val()) > 100) && $('#discount_' + i).val() != "") {
-                                                                alert("Enter Valid Discount");
-                                                                $('#discount_' + i).val(0);
-                                                            } else if (parseFloat($('#discount_' + i).val()) > 0) {
-                                                                discount = parseFloat($('#discount_' + i).val());
-                                                            }
                                                             if (document.getElementById('tyre_id_' + i) && $('#qty_' + i).val().match(/^(\d+)$/) && $('#qty_' + i).val() != "") {
                                                                 if ($('#qty_' + i).val() > 0) {
                                                                     var line_amount = (parseFloat($('#qty_' + i).val()) * parseFloat($('#price_' + i).val()) * (100 - discount)) / 100;
 
                                                                     tot_amount += line_amount;
-                                                                    // console.log('line ' + line_amount + 'gnd ' + tot_amount);
                                                                     $('#amount_' + i).val(line_amount.formatMoney(2, '.', ','));
                                                                 }
                                                             } else {
@@ -461,16 +411,6 @@
                                                             }
                                                         }
                                                         $('#tot_amount').val(tot_amount.formatMoney(2, '.', ','));
-                                                        var net_amount = tot_amount;
-                                                        if ($('#whole_dis').val() == "") {
-                                                            $('#whole_dis').val(0);
-                                                        } else if (!$('#whole_dis').val().match(/^\d+(\.\d{0,1})?$/)) {
-                                                            alert("Enter Valid Discount");
-                                                            $('#whole_dis').val(0);
-                                                        } else {
-                                                            net_amount = (tot_amount * (100 - parseFloat($('#whole_dis').val()))) / 100;
-                                                        }
-                                                        $('#net_amount').val(net_amount.formatMoney(2, '.', ','));
                                                     }
 
                                                     function tyre_order_validation() {

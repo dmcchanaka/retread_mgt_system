@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeltSubcategoriesTable extends Migration
+class CreateUserTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateBeltSubcategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('belt_subcategories', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('user_types', function (Blueprint $table) {
+            $table->increments('u_tp_id');
+            $table->string('user_type');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateBeltSubcategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('belt_subcategories');
+        Schema::dropIfExists('user_types');
     }
 }

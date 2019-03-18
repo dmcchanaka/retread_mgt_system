@@ -5,7 +5,7 @@
 <div class="row">
     <div class="page-title">
         <div class="title_left">
-            <h3>PRICE Management</h3>
+            <h3>GRN Management</h3>
         </div>
 
         <div class="title_right">
@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Price Management</a></li>
+                        <li><a href="#">GRN Management</a></li>
                         <li class="active">View</li>
                     </ol>
                 </div>
@@ -25,59 +25,44 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Price Information<small></small></h2>
+                    <h2>GRN Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
                 @include('flash-message')
                 <div style="padding-right:20px;text-align:right">
                     <button type="button" class="btn">
-                    <a href="{{url('prices')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Price</a>
+                    <a href="{{url('grn')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New GRN</a>
                     </button>
                 </div>
                 <div class="x_content">
                     <?php
-                    if (sizeof($prices) > 0) {
-                        ?>
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap table table-striped jambo_table bulk_action" cellspacing="0" width="100%">
-                            <thead>
-                                <tr class="headings">
-                                    <th style="text-align: center">Tyre Name</th>
-                                    <th style="text-align: center">Category</th>
-                                    <th style="text-align: center">Sub Category</th>
-                                    <th style="text-align: center">Price No</th>
-                                    <th style="text-align: center">Received Price</th>
-                                    <th style="text-align: center">Customer Price</th>
-                                    <th style="text-align: center">Edit</th>
-                                    <th style="text-align: center">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                              @foreach ($prices as $values)
-                                  <tr>
-                                  <td>{{$values->tyre->tyre_name}}</td>
-                                  <td>{{$values->category->cat_name}}</td>
-                                  <td>{{$values->subcategory->sub_cat_name}}</td>
-                                  <td>{{$values->price_no}}</td>
-                                  <td style="text-align:right">{{$values->rp_price}}</td>
-                                  <td style="text-align:right">{{$values->cus_price}}</td>
-                                  <td style="text-align: center;cursor: pointer">
-                                    <span class="pull-right-container">
-                                        <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
-                                    </span>
-                                </td>
+                    if (sizeof($grn) > 0) {
+                       ?>
+                       <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap table table-striped jambo_table bulk_action" cellspacing="0" width="100%">
+                        <thead>
+                            <tr class="headings">
+                                <th style="text-align: center">GRN No.</th>
+                                <th style="text-align: center">Invoice No.</th>
+                                <th style="text-align: center">Net Amount</th>
+                                <th style="text-align: center">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($grn as $values)
+                            <tr>
+                                <td>{{$values->grn_no}}</td>
+                                <td>{{$values->invoice_no}}</td>
+                                <td style="text-align:right;padding-right:5px">{{number_format($values->net_amount,2)}}</td>
                                 <td style="text-align: center;cursor: pointer">
                                     <span class="pull-right-container">
-                                        <a href="" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                        <a href="{{url('display_grn', $values->grn_id)}}" target="_blank"><i class="glyphicon glyphicon-modal-window"></i></a>
                                     </span>
                                 </td>
-                                  </tr>
-                              @endforeach
-                                   
-
-                            </tbody>
-                        </table>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                       </table>
                     <?php } ?>
-
                 </div>
             </div>
         </div>   

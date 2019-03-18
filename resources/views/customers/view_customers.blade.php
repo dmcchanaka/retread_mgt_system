@@ -26,17 +26,27 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Customer Information<small></small></h2>
+                    <div class="col-md-3 offset-md-3"></div>
+                    <div class="col-md-3 offset-md-3"></div>
+                    <div class="col-md-2 offset-md-2"></div>
+                    <div>
+                    
+                    <button type="button" class="btn">
+                    <a href="{{url('customers')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Customers</a>
+                    </button>
+                    </div>
                     <div class="clearfix"></div>
+                    @include('flash-message')
                 </div>
                 <div class="x_content">
                     <?php
                     if (sizeof($customers) > 0) {
                         ?>
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap table table-striped jambo_table bulk_action" cellspacing="0" width="100%">
                             <thead>
-                                <tr>
-                                    <th style="text-align: center">Name</th>
-                                    <th style="text-align: center">Gender</th>
+                                <tr class="headings">
+                                    <th style="text-align: center" class="column-title">Name</th>
+                                    <th style="text-align: center" class="column-title">Gender</th>
                                     <th style="text-align: center">NIC</th>
                                     <th style="text-align: center">Mobile No</th>
                                     <th style="text-align: center">Address</th>
@@ -65,18 +75,14 @@
                                         <td><?php echo $con->email; ?></td>
                                         <td style="text-align: center"><?php if ($con->con_status == 0) { ?><span style="color: green;"><?php echo $con_status; ?></span><?php }else{ ?><span style="color: red;"><?php echo $con_status; ?></span><?php }?></td>
                                         <td style="text-align: center;cursor: pointer">
-                                            <?php if ($con->con_status == 0) { ?>
                                             <span class="pull-right-container">
                                                 <a href="{{url('edit_customer/'.$con->id)}}"><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
-                                            <?php } ?>
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
-                                            <?php if ($con->con_status == 0) { ?>
-                                            <span class="pull-right-container" onclick="delete_customers('<?php echo $con->id; ?>');">
-                                                <a href="{{url('delete_customer/'.$con->id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                            <span class="pull-right-container" onclick="delete_customers('<?php echo $con->cus_id; ?>');">
+                                                <a href="{{url('delete_customer/'.$con->cus_id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
-                                            <?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>

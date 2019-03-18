@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeltPricesTable extends Migration
+class CreateManufacturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateBeltPricesTable extends Migration
      */
     public function up()
     {
-        Schema::create('belt_prices', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('manufactures', function (Blueprint $table) {
+            $table->increments('manufac_id');
+            $table->string('manufacture_name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateBeltPricesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('belt_prices');
+        Schema::dropIfExists('manufactures');
     }
 }

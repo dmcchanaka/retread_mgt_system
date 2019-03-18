@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <link rel="icon" type="image/png" sizes="48x48" href="../images/fevicon.png">
         <title>TIRE RETREADING MANAGEMENT SYSTEM</title>
 
         <!-- Bootstrap -->
@@ -60,30 +60,12 @@
                                             <li><a href="index3.html">Dashboard3</a></li>
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-user"></i> User Management <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="{{url('users')}}"><i class="fa fa-user-plus"></i> User Registration</a></li>
-                                            <li><a href="{{url('view_users')}}"><i class="fa fa-users"></i> View Users</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-user"></i> Customer Management <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="{{url('customers')}}"><i class="fa fa-user-plus"></i> Customer Registration</a></li>
-                                            <li><a href="{{url('view_customers')}}"><i class="fa fa-users"></i> View Customer</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-car"></i> Tyre Management <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="{{url('tyres')}}"><i class="fa fa-car"></i> Tyre Registration</a></li>
-                                            <li><a href="{{url('view_tyres')}}"><i class="fa fa-car"></i> View Tyres</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-money"></i> Price Management <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="{{url('prices')}}"><i class="fa fa-money"></i> Price Registration</a></li>
-                                            <li><a href="{{url('view_prices')}}"><i class="fa fa-money"></i> View Prices</a></li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="{{url('view_users')}}"><i class="fa fa-user"></i> User Management</a></li>
+                                    <li><a href="{{url('view_customers')}}"><i class="fa fa-user"></i> Customer Management</a></li>
+                                    <li><a href="{{url('view_tyres')}}"><i class="fa fa-car"></i> Tyre Management</a></li>
+                                    <li><a href="{{url('view_prices')}}"><i class="fa fa-money"></i> Price Management</a></li>
+                                    <li><a href="{{url('view_grn')}}"><i class="fa fa-database"></i> GRN Management</a></li>
+                                    <li><a href="{{url('view_orders')}}"><i class="fa fa-cubes"></i> Order Management</a></li>
                                 </ul>
                             </div>
                         </div>

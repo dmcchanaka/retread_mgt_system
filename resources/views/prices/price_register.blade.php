@@ -61,12 +61,12 @@
                                             </td>
                                             <td class=" ">
                                                 <select id="cat_id_1" name="cat_id_1" onchange="load_sub_category('1');">
-                                                    <option value="">SELECT CATEGORY</option>
+                                                    <option value="">CATEGORY</option>
                                                 </select>
                                             </td>
                                             <td class=" ">
                                                 <select id="sub_cat_id_1" name="sub_cat_id_1">
-                                                    <option value="">SELECT SUB CATEGORY</option>
+                                                    <option value="">SUB CATEGORY</option>
                                                 </select>
                                             </td>
                                             <td class=" ">
@@ -110,6 +110,7 @@
                                                             source: '/tyres/find',
                                                             minLength: 1,
                                                             select: function (event, ui) {
+                                                                console.log(ui);
                                                                 $("#tyre_names_" + num).val(ui.item.label);
                                                                 $("#tyre_id_" + num).val(ui.item.id);
                                                                 load_categories(num, ui.item.id);
@@ -131,13 +132,13 @@
                                                             success: function (data) {
                                                                 if (data.length > 0) {
                                                                     $('#cat_id_' + num).empty();
-                                                                    $('#cat_id_' + num).append('<option value="">SELECT CATEGORY</option>');
+                                                                    $('#cat_id_' + num).append('<option value="">CATEGORY</option>');
                                                                     for (var i = 0; i < data.length; i++) {
                                                                         $('#cat_id_' + num).append('<option value=' + data[i].cat_id + '>' + data[i].cat_name + '</option>');
                                                                     }
                                                                 } else {
                                                                     $('#cat_id_' + num).empty();
-                                                                    $('#cat_id_' + num).append('<option value="">SELECT CATEGORY</option>');
+                                                                    $('#cat_id_' + num).append('<option value="">CATEGORY</option>');
                                                                 }
                                                             }
                                                         });
@@ -149,24 +150,22 @@
                                                             }
                                                         });
                                                         var cat_id = $('#cat_id_' + num).val();
-                                                        var tyre_id = $('#tyre_id_' + num).val();
                                                         $.ajax({
                                                             type: "GET",
                                                             url: '/tyres/sub_category',
                                                             data: {
-                                                                cat_id: cat_id,
-                                                                tyre_id: tyre_id
+                                                                cat_id: cat_id
                                                             },
                                                             success: function (data) {
                                                                 if (data.length > 0) {
                                                                     $('#sub_cat_id_' + num).empty();
-                                                                    $('#sub_cat_id_' + num).append('<option value="">SELECT SUB CATEGORY</option>');
+                                                                    $('#sub_cat_id_' + num).append('<option value="">SUB CATEGORY</option>');
                                                                     for (var i = 0; i < data.length; i++) {
                                                                         $('#sub_cat_id_' + num).append('<option value=' + data[i].sub_cat_id + '>' + data[i].sub_cat_name + '</option>');
                                                                     }
                                                                 } else {
                                                                     $('#sub_cat_id_' + num).empty();
-                                                                    $('#sub_cat_id_' + num).append('<option value="">SELECT SUB CATEGORY</option>');
+                                                                    $('#sub_cat_id_' + num).append('<option value="">SUB CATEGORY</option>');
                                                                 }
                                                             }
                                                         });
@@ -231,12 +230,12 @@
                                                                 + '</td>'
                                                                 + '<td class=" ">'
                                                                 + '<select id="cat_id_' + num + '" name="cat_id_' + num + '" onchange="load_sub_category(' + num + ');">'
-                                                                + '<option value="">SELECT CATEGORY</option>'
+                                                                + '<option value="">CATEGORY</option>'
                                                                 + '</select>'
                                                                 + '</td>'
                                                                 + '<td class=" ">'
                                                                 + '<select id="sub_cat_id_' + num + '" name="sub_cat_id_' + num + '">'
-                                                                + '<option value="">SELECT SUB CATEGORY</option>'
+                                                                + '<option value="">SUB CATEGORY</option>'
                                                                 + '</select>'
                                                                 + '</td>'
                                                                 + '<td class=" "><input type="text" id="price_no_' + num + '" name="price_no_' + num + '" onclick="gen_price_no(' + num + ');" /><input type="hidden" id="pr_no_' + num + '" name="pr_no_' + num + '" /></td>'
