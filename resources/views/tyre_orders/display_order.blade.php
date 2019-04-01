@@ -28,37 +28,6 @@
                     <h2>ORDER Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
-                <!--                <div class="x_panel">
-                
-                                    <div class="x_content">
-                                        <div class="row">
-                                            <div class="col-md-4 col-sm-12 col-xs-12 form-group">
-                                            </div>
-                                            <div class="col-md-4 col-sm-12 col-xs-12 form-group text-center">
-                                                <table class="table table-striped">
-                                                    <tr>
-                                                        <td class="text-left">TYRE ORDER NO.</td>
-                                                        <td>:</td>
-                                                        <td class="text-left">{{$order->order_no}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-left">TYRE DATE</td>
-                                                        <td>:</td>
-                                                        <td class="text-left">{{$order->created_at}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-left">CUSTOMER</td>
-                                                        <td>:</td>
-                                                        <td class="text-left">{{$order->customer->customer_name}}</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        <div class="col-md-4 col-sm-12 col-xs-12 form-group">
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-                <!--</div-->
                 <div class="x_panel">
                     <div class="x_content">
                         <div class="row">
@@ -93,11 +62,12 @@
                         <table class="table table-striped jambo_table bulk_action">
                             <thead>
                                 <tr class="headings">
-                                    <th class="column-title">Tire Name </th>
-                                    <th class="column-title">Price No. </th>
-                                    <th class="column-title">Price </th>
-                                    <th class="column-title">Qty. </th>
-                                    <th class="column-title">Amount </th>
+                                    <th class="column-title" style="text-align: center">Tire Name </th>
+                                    <th class="column-title" style="text-align: center">Price No. </th>
+                                    <th class="column-title" style="text-align: center">Price </th>
+                                    <th class="column-title" style="text-align: center">Qty. </th>
+                                    <th class="column-title" style="text-align: center">Discount. </th>
+                                    <th class="column-title" style="text-align: center">Amount </th>
                                 </tr>
                             </thead>
 
@@ -105,21 +75,32 @@
                                 <?php
                                 $total_amt = 0;
                                 foreach ($orderDetails as $data) {
-                                    $total_amt += $data->qty * $data->price->rp_price;
+                                    $line_amt = 0;
+                                    $line_amt = ($data->qty*$data->price->cus_price)-(($data->qty*$data->price->cus_price) * $data->discount_per)/100;
+                                    $total_amt += $line_amt;
                                     ?>
                                     <tr>
                                         <td style="text-align: left;padding-left: 3px">{{$data->tyre->tyre_name}}</td>
                                         <td style="text-align: left;padding-left: 3px">{{$data->price->price_no}}</td>
-                                        <td style="text-align: right;padding-right: 3px">{{$data->price->rp_price}}</td>
+                                        <td style="text-align: right;padding-right: 3px">{{number_format($data->price->cus_price,2)}}</td>
                                         <td style="text-align: right;padding-right: 3px">{{$data->qty}}</td>
-                                        <td style="text-align: right;padding-right: 3px">{{number_format($data->qty*$data->price->rp_price,2)}}</td>
+                                        <td style="text-align: right;padding-right: 3px">@if(isset($data->discount_per)){{$data->discount_per}} % @endif</td>
+                                        <td style="text-align: right;padding-right: 3px">{{number_format($line_amt,2)}}</td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4" style="text-align: right"><b>Total Amount :</b></td>
+                                    <td colspan="5" style="text-align: right"><b>Gross Amount :</b></td>
                                     <td style="text-align: right;padding-right: 3px"><b>{{number_format($total_amt,2)}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right"><b>Discount  {{$order->discount_per}} <?php if(isset($order->discount_per)){echo '%'; } ?> :</b></td>
+                                    <td style="text-align: right;padding-right: 3px"><b>{{number_format($order->discount,2)}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right"><b>Net Amount :</b></td>
+                                    <td style="text-align: right;padding-right: 3px"><b>{{number_format($total_amt - $order->discount,2)}}</b></td>
                                 </tr>
                             </tfoot>
                         </table>

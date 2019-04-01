@@ -26,17 +26,13 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Customer Information<small></small></h2>
-                    <div class="col-md-3 offset-md-3"></div>
-                    <div class="col-md-3 offset-md-3"></div>
-                    <div class="col-md-2 offset-md-2"></div>
-                    <div>
-                    
-                    <button type="button" class="btn">
-                    <a href="{{url('customers')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Customers</a>
-                    </button>
-                    </div>
                     <div class="clearfix"></div>
-                    @include('flash-message')
+                </div>
+                @include('flash-message')
+                <div style="padding-right:20px;text-align:right">
+                    <button type="button" class="btn">
+                    <a href="{{url('customers')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Customer</a>
+                    </button>
                 </div>
                 <div class="x_content">
                     <?php

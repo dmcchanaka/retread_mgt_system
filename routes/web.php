@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/display_order/{id}', 'TyreordersController@get_order_details'); //Get user details for display
     Route::get('delete_order/{id}', 'TyreordersController@destroy'); //Delete Sales Orders
     Route::get('/print_order/{id}', 'TyreordersController@print_order'); //Print Sales Orders
+    Route::get('edit_order/{id}', 'TyreordersController@edit_order'); //Edit Sales Order
+    Route::post('update_salesorder', 'TyreordersController@update_order'); //Update Edited Sales Order
     
     //stock add module
     Route::get('view_grn', 'GoodRecievedController@index')->name('view_grn'); //view added grns

@@ -70,7 +70,7 @@
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
                                     <span class="pull-right-container">
-                                        <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a href="{{url('edit_order',$values->order_id)}}" target="_blank"><i class="glyphicon glyphicon-pencil"></i></a>
                                     </span>
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
