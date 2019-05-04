@@ -58,12 +58,18 @@
                                             <li><a href="#">Dashboard</a></li>
                                         </ul>
                                     </li>
+                                    <li><a><i class="fa fa-home"></i> Report <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                        <li><a href="{{route('stock_report.index')}}">Stock Report</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a href="{{url('view_users')}}"><i class="fa fa-user"></i> User Management</a></li>
                                     <li><a href="{{url('view_customers')}}"><i class="fa fa-user"></i> Customer Management</a></li>
                                     <li><a href="{{url('view_tyres')}}"><i class="fa fa-car"></i> Tyre Management</a></li>
                                     <li><a href="{{url('view_prices')}}"><i class="fa fa-money"></i> Price Management</a></li>
                                     <li><a href="{{url('view_grn')}}"><i class="fa fa-database"></i> GRN Management</a></li>
                                     <li><a href="{{url('view_orders')}}"><i class="fa fa-cubes"></i> Order Management</a></li>
+                                    <li><a href="{{url('view_completeorders')}}"><i class="fa fa-cubes"></i> Order Management</a></li>
                                 </ul>
                             </div>
                         </div>

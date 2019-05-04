@@ -9,14 +9,20 @@ class Tyre extends Model
 {
     use SoftDeletes;
     protected $table = 'tyres';
-    
+
     protected $primaryKey = 'tyre_id';
 
     protected $fillable = [
-        'tyre_name','tyre_size','manufac_id'
+        'tyre_name', 'tyre_size', 'manufac_id',
     ];
 
-    public function manufacture(){
+    public function manufacture()
+    {
         return $this->belongsTo('App\Manufactures', 'manufac_id', 'manufac_id');
+    }
+
+    public function belt_price()
+    {
+        return $this->hasMany('App\Belt_price', 'tyre_id', 'tyre_id');
     }
 }

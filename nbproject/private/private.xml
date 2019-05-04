@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/tyre_orders/view_orders.blade.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/app/TyreOrderProduct.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/app/Tyre_orders.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/tyre_orders/orders_add.blade.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/app/Http/Controllers/CustomerController.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/tyre_orders/edit_order.blade.php</file>
+            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/payments/load_invoice.blade.php</file>
+            <file>file:/C:/xampp/htdocs/retread_mgt_system/app/Http/Controllers/PaymentController.php</file>
+            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/payments/index.blade.php</file>
+            <file>file:/C:/xampp/htdocs/retread_mgt_system/app/Http/Controllers/CompleteOrderController.php</file>
             <file>file:/C:/xampp/htdocs/retread_mgt_system/routes/web.php</file>
-            <file>file:/C:/xampp/htdocs/retread_mgt_system/resources/views/tyre_orders/print_order.blade.php</file>
             <file>file:/C:/xampp/htdocs/retread_mgt_system/app/Http/Controllers/TyreordersController.php</file>
         </group>
     </open-files>

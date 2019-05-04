@@ -62,21 +62,35 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/orders/customers', 'TyreordersController@search_customers'); //Auto complete get customers
     Route::get('/tyres/batch_numbers', 'TyreordersController@get_batchno'); //load batch numbers
     Route::get('/tyres/cus_prices', 'TyreordersController@get_cus_prices'); //load customer prices
+
     Route::post('add_salesorder', 'TyreordersController@store'); //Save Sales Order
-    Route::get('view_orders','TyreordersController@create')->name('view_orders'); // View Added Orders
+    Route::get('view_orders', 'TyreordersController@create')->name('view_orders'); // View Added Orders
     Route::get('/display_order/{id}', 'TyreordersController@get_order_details'); //Get user details for display
     Route::get('delete_order/{id}', 'TyreordersController@destroy'); //Delete Sales Orders
     Route::get('/print_order/{id}', 'TyreordersController@print_order'); //Print Sales Orders
     Route::get('edit_order/{id}', 'TyreordersController@edit_order'); //Edit Sales Order
     Route::post('update_salesorder', 'TyreordersController@update_order'); //Update Edited Sales Order
-    
+    Route::get('/complete_order/{id}', 'TyreordersController@complete_order'); // Load Tyre order Complete Purpose
+    Route::post('/update_order_reason', 'TyreordersController@update_order_reason'); // Update order reason
+
+    Route::get('/order/stock_availability', 'TyreordersController@get_stocks'); //Check stock availability
+
     //stock add module
     Route::get('view_grn', 'GoodRecievedController@index')->name('view_grn'); //view added grns
     Route::get('grn/generate_no', 'GoodRecievedController@gen_grn_no'); //Generate GRN No
     Route::get('grn', 'GoodRecievedController@show'); //create grn
-    Route::post('add_grn', 'GoodRecievedController@store');//save grn details
+    Route::post('add_grn', 'GoodRecievedController@store'); //save grn details
     Route::get('/display_grn/{id}', 'GoodRecievedController@get_grn_details'); //Get user details for display
-    
-    Route::get('complete_orders/{id}', 'CompleteOrderController@create'); // Load complete orders view
 
+    Route::post('add_completeorder', 'CompleteOrderController@store'); // Load complete orders view
+    Route::get('view_completeorders', 'CompleteOrderController@index'); // View added complete orders
+    Route::get('display_completeorder/{id}', 'CompleteOrderController@show'); // Display complete orders
+
+    Route::get('payment', 'PaymentController@index'); //Load Payment view
+    Route::get('/payment/load_invoice', 'PaymentController@get_outstanding_invoice');
+    // Route::get('/load_invoice', function() {
+    // return View::make('payments/load_invoice');
+    //});
+    Route::get('stock_report', 'StockReportController@index')->name('stock_report.index');
+    Route::post('stock_report_filter', 'StockReportController@filter')->name('stock_report.filter');
 });

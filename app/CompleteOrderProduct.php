@@ -5,19 +5,20 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TyreOrderProduct extends Model
+class CompleteOrderProduct extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'tyre_order_product';
+    protected $table = 'complete_order_products';
 
-    protected $primaryKey = 'op_id';
+    protected $primaryKey = 'cop_id';
 
     protected $fillable = [
-        'order_id','tyre_id','price_id','discount','discount_per','qty','line_amount','serial_no'
+        'com_order_id','tyre_id','price_id','discount','discount_per','qty','line_amount','serial_no'
     ];
-    public function order_product(){
-        return $this->belongsTo('App\Tyre_orders','order_id','order_id');
+    
+    public function complete_order(){
+        return $this->belongsTo('App\CompleteOrder','com_order_id','com_order_id');
     }
     public function tyre(){
         return $this->belongsTo('App\Tyre', 'tyre_id', 'tyre_id');

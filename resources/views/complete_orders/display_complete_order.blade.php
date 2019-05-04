@@ -5,7 +5,7 @@
 <div class="row">
     <div class="page-title">
         <div class="title_left">
-            <h3>ORDER Management</h3>
+            <h3>COMPLETE Order Management</h3>
         </div>
 
         <div class="title_right">
@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">ORDER Management</a></li>
+                        <li><a href="#">COMPLETE Order Management</a></li>
                         <li class="active">View</li>
                     </ol>
                 </div>
@@ -25,23 +25,28 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>ORDER Information<small></small></h2>
+                    <h2>COMPLETE Order Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_panel">
                     <div class="x_content">
                         <div class="row">
-                            <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                             </div>
-                            <div class="col-md-4 col-sm-12 col-xs-12 form-group text-center">
+                            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-center">
                                 <table class="table table-bordered">
                                     <tr>
                                         <td class="text-left">TYRE ORDER NO.</td>
                                         <td>:</td>
-                                        <td class="text-left">{{$order->order_no}}</td>
+                                        <td class="text-left">{{$order->tyre_order->order_no}}</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-left">TYRE DATE</td>
+                                        <td class="text-left">COMPLETE ORDER NO.</td>
+                                        <td>:</td>
+                                        <td class="text-left">{{$order->com_order_no}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">DATE</td>
                                         <td>:</td>
                                         <td class="text-left">{{$order->created_at}}</td>
                                     </tr>
@@ -52,7 +57,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                             </div>
                         </div>
                     </div>

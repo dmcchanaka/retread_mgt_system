@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Belt_price;
 use App\Customer;
 use App\Tyre_orders;
 use App\TyreOrderProduct;
 use App\Belt_category;
 use App\Belt_subcategory;
+use App\RecievedBelt;
+use App\Reason;
+use App\CompleteOrder;
 use PDF;
+use App\Mail\TyreOrder;
 
 class TyreordersController extends Controller {
 
@@ -41,6 +46,7 @@ class TyreordersController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
         DB::beginTransaction();
         try {
             $added_user = Auth::user()->id;
@@ -56,7 +62,7 @@ class TyreordersController extends Controller {
                             'added_by' => $added_user
                 ]);
 
-                $lastOrder = Tyre_orders::select('order_id')
+                $lastOrder = Tyre_orders::select('order_id', 'order_no')
                         ->latest()
                         ->first();
                 for ($i = 1; $i <= $request->item_count; $i++) {
@@ -68,10 +74,19 @@ class TyreordersController extends Controller {
                                 'discount' => 0,
                                 'discount_per' => $request['discount_' . $i],
                                 'qty' => $request['qty_' . $i],
-                                'line_amount' => str_replace(',', '', $line_amt)
+                                'line_amount' => str_replace(',', '', $line_amt),
+                                'serial_no' => $request['serial_' . $i]
                     ]);
                 }
+
+                $customer = Customer::find($request->cus_id);
+                $data = [
+                    'name' => $customer->customer_name,
+                    "message" => "Your tyre order has been collected successfully. it will be processing withing next few days. your order no is " . $lastOrder->order_no
+                ];
+                Mail::to($customer->email)->send(new TyreOrder($data));
             }
+
             DB::commit();
             return redirect()->route('view_orders')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
         } catch (\Exception $e) {
@@ -88,7 +103,8 @@ class TyreordersController extends Controller {
 
     public function print_order($id) {
         $order = Tyre_orders::with('customer')->find($id);
-        $pdf = PDF::loadView('tyre_orders.print_order', compact('order'));
+        $orderDetails = TyreOrderProduct::with('tyre', 'price')->where('order_id', '=', $id)->get();
+        $pdf = PDF::loadView('tyre_orders.print_order', compact('order', 'orderDetails'));
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('invoice.pdf');
     }
@@ -154,17 +170,31 @@ class TyreordersController extends Controller {
             'cat_id' => $request->cat_id,
             'tyre_id' => $request->tyre_id,
         ];
-        $price_no = Belt_price::select('price_id AS price_id', 'price_no AS price_no')
+        $price_no = Belt_price::select('price_id AS price_id', 'price_no AS price_no', 'cus_price AS cus_price')
                 ->where($data)
                 ->get();
         return $price_no;
     }
 
     public static function get_cus_prices(Request $request) {
-        $price = Belt_price::select('cus_price AS cus_price')
+        $price = Belt_price::select('cus_price AS cus_price', 'price_id AS price_id')
                 ->where('price_id', '=', $request->batch_id)
                 ->get();
         return $price;
+    }
+
+    public function get_stocks(Request $request) {
+
+//        $RecievedBelt = RecievedBelt::where('price_id','=',$request->price_id)
+//                ->where('tyre_id','=',$request->tyre_id)
+//                ->groupBy('price_id')
+//                ->get();
+        $RecievedBelt = RecievedBelt::groupBy('price_id')
+                ->selectRaw('sum(remaining_qty) as sum, price_id')
+                ->where('price_id', '=', $request->price_id)
+                ->where('tyre_id', '=', $request->tyre_id)
+                ->pluck('sum');
+        return $RecievedBelt;
     }
 
     public static function edit_order($id) {
@@ -179,9 +209,9 @@ class TyreordersController extends Controller {
     public static function update_order(Request $request) {
         DB::beginTransaction();
         try {
-            
+
             //Remove old Items
-            $distroyOrderProduct = TyreOrderProduct::where('order_id',$request->so_id)->delete();
+            $distroyOrderProduct = TyreOrderProduct::where('order_id', $request->so_id)->delete();
             //Add New Items
             for ($i = 1; $i <= $request->item_count; $i++) {
                 $line_amt = ($request['qty_' . $i] * $request['price_' . $i]);
@@ -192,22 +222,105 @@ class TyreordersController extends Controller {
                             'discount' => 0,
                             'discount_per' => $request['discount_' . $i],
                             'qty' => $request['qty_' . $i],
-                            'line_amount' => str_replace(',', '', $line_amt)
+                            'line_amount' => str_replace(',', '', $line_amt),
+                            'serial_no' => $request['serial_' . $i]
                 ]);
             }
             $discount_amt = round((str_replace(',', '', $request->tot_amount) / 100) * str_replace(',', '', $request->whole_dis), 2);
-            $Order = Tyre_orders::where('order_id',$request->so_id)->latest()->first();
+            $Order = Tyre_orders::where('order_id', $request->so_id)->latest()->first();
             $Order->order_amount = str_replace(',', '', $request->tot_amount);
             $Order->discount = str_replace(',', '', $discount_amt);
             $Order->discount_per = str_replace(',', '', $request->whole_dis);
             $Order->save();
-            
+
             DB::commit();
             return redirect()->route('view_orders')->with('success', 'RECORD HAS BEEN SUCCESSFULLY UPDATED!');
         } catch (Exception $ex) {
             DB::rollback();
             return redirect()->route('view_orders')->with('error', 'RECORD HAS NOT BEEN SUCCESSFULLY UPDATED!');
         }
+    }
+
+    public static function complete_order($id) {
+//        $stock = DB::table('received_belts')
+//                ->select('tyre_id',DB::raw('SUM(remaining_qty) as stock'))
+//                ->whereNull('received_belts.deleted_at')
+//                ->groupBy('tyre_id');
+//
+//        $orderDetails = DB::table('tyre_order_product')
+//                ->join('belt_prices', 'tyre_order_product.price_id', '=', 'belt_prices.price_id')
+//                ->join('belt_categories', 'belt_categories.cat_id', '=', 'belt_prices.cat_id')
+//                ->join('belt_subcategories','belt_subcategories.sub_cat_id','belt_prices.sub_cat_id')
+//                ->join('tyres','tyres.tyre_id','belt_prices.tyre_id')
+//                ->joinSub($stock, 'stk', function ($join) {
+//                    $join->on('tyre_order_product.tyre_id', '=', 'stk.tyre_id');
+//                })->where('tyre_order_product.order_id', '=', $id)
+//                ->whereNull('tyre_order_product.deleted_at')
+//                ->whereNull('belt_prices.deleted_at')
+//                ->whereNull('belt_categories.deleted_at')
+//                ->whereNull('belt_subcategories.deleted_at')
+//                ->whereNull('tyres.deleted_at')
+//                ->get();
+        $orderDetails = DB::table("tyre_order_product")
+                ->join('belt_prices', 'tyre_order_product.price_id', '=', 'belt_prices.price_id')
+                ->join('belt_categories', 'belt_categories.cat_id', '=', 'belt_prices.cat_id')
+                ->join('belt_subcategories', 'belt_subcategories.sub_cat_id', 'belt_prices.sub_cat_id')
+                ->join('tyres', 'tyres.tyre_id', 'belt_prices.tyre_id')
+                ->select("tyre_order_product.*", "belt_categories.*", "belt_subcategories.*", "belt_prices.*", "tyres.*", DB::raw("(SELECT IFNULL(SUM(received_belts.remaining_qty),0) FROM received_belts
+                                WHERE received_belts.tyre_id = tyre_order_product.tyre_id
+                                AND received_belts.price_id = tyre_order_product.price_id
+                                AND received_belts.deleted_at IS NULL
+                                GROUP BY received_belts.tyre_id) as product_stock"))
+                ->where('tyre_order_product.order_id', '=', $id)
+                ->whereNull('tyre_order_product.rsn_id')
+                ->whereNull('tyre_order_product.deleted_at')
+                ->get();
+        $orderDetails->transform(function($orderDetails) {
+            return [
+                'op_id' => $orderDetails->op_id,
+                'order_id' => $orderDetails->order_id,
+                'tyre_id' => $orderDetails->tyre_id,
+                'tyre_name' => $orderDetails->tyre_name,
+                'price_id' => $orderDetails->price_id,
+                'cus_price' => $orderDetails->cus_price,
+                'cat_id' => $orderDetails->cat_id,
+                'cat_name' => $orderDetails->cat_name,
+                'sub_cat_id' => $orderDetails->sub_cat_id,
+                'sub_cat_name' => $orderDetails->sub_cat_name,
+                'discount_per' => $orderDetails->discount_per,
+                'discount' => $orderDetails->discount,
+                'qty' => $orderDetails->qty,
+                'product_stock' => ($orderDetails->product_stock == null) ? 0 : $orderDetails->product_stock,
+                'serial_no' => $orderDetails->serial_no
+            ];
+        });
+        $category = Belt_category::all();
+        $subCat = Belt_subcategory::all();
+        $price = Belt_price::all();
+        $order = Tyre_orders::with('customer')->where('order_id', '=', $id)->get();
+        $order->transform(function($order) {
+            return [
+                'order_id' => $order->order_id,
+                'order_no' => $order->order_no,
+                'cus_id' => $order->cus_id,
+                'cus_name' => $order->customer->customer_name,
+                'discount_per' => $order->discount_per
+            ];
+        });
+        $reason = Reason::get();
+        $com_order_no = CompleteOrder::count(); //CompleteOrder
+
+        return view('complete_orders.complete_orders_add', ['orderDetails' => $orderDetails, 'category' => $category, 'subCat' => $subCat, 'price' => $price, 'order' => $order, 'reason' => $reason, 'com_order_no' => $com_order_no]);
+    }
+
+    public function update_order_reason(Request $request) {
+        $orderPro = TyreOrderProduct::find($request->order_pro_id);
+        $orderPro->rsn_id = $request->reason_id;
+        $orderPro->save();
+    }
+
+    public function storeorder(Request $request) {
+        print_r($request);
     }
 
 }

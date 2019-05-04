@@ -17,7 +17,7 @@ class CreateTyreOrdersTable extends Migration
             $table->increments('order_id');
             $table->string('order_no')->unique();
 
-            $table->unsignedInteger('cus_id')->nullable();;
+            $table->unsignedInteger('cus_id')->nullable();
             $table->foreign('cus_id')->references('cus_id')->on('customers');
 
             $table->double('order_amount',8,2)->nullable();
