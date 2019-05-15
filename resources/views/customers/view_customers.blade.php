@@ -30,9 +30,13 @@
                 </div>
                 @include('flash-message')
                 <div style="padding-right:20px;text-align:right">
+                    @foreach (Auth::user()->user_permission as $per)
+                    @if($per->per_id == '6')
                     <button type="button" class="btn">
                     <a href="{{url('customers')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Customer</a>
                     </button>
+                    @endif
+                    @endforeach
                 </div>
                 <div class="x_content">
                     <?php
@@ -71,14 +75,22 @@
                                         <td><?php echo $con->email; ?></td>
                                         <td style="text-align: center"><?php if ($con->con_status == 0) { ?><span style="color: green;"><?php echo $con_status; ?></span><?php }else{ ?><span style="color: red;"><?php echo $con_status; ?></span><?php }?></td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '7')
                                             <span class="pull-right-container">
                                                 <a href="{{url('edit_customer/'.$con->id)}}"><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '8')
                                             <span class="pull-right-container" onclick="delete_customers('<?php echo $con->cus_id; ?>');">
                                                 <a href="{{url('delete_customer/'.$con->cus_id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                     </tr>
                                 <?php } ?>

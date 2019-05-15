@@ -31,9 +31,13 @@
                 </div>
                 @include('flash-message')
                 <div style="padding-right:20px;text-align:right">
+                    @foreach (Auth::user()->user_permission as $per)
+                        @if($per->per_id == '2')
                     <button type="button" class="btn">
                     <a href="{{url('users')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New User</a>
                     </button>
+                        @endif
+                    @endforeach
                 </div>
                 <div class="x_content">
                     <?php
@@ -62,14 +66,22 @@
                                         <td>{{$user->mobile_no}}</td>
                                         <td>{{$user->address}}</td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '3')
                                             <span class="pull-right-container">
                                                 <a href="{{url('get_userdetails', $user->id)}}"><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '4')
                                             <span class="pull-right-container">
                                                 <a href="{{url('delete_user/'.$user->id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                     </tr>
                                 <?php } ?>

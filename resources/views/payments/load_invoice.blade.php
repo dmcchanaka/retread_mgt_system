@@ -28,14 +28,14 @@
                         <input type="hidden" id="checked_satus_{{$count}}" name="checked_satus_{{$count}}" value="0"/>
                     </td>
                     <td style="text-align: right">{{$out['com_order_no']}}
-                        <input type="hidden" value="{{$out['com_order_no']}}"  name="order_id_{{$count}}" id="order_id_{{$count}}"/>
+                        <input type="hidden" value="{{$out['com_order_id']}}"  name="order_id_{{$count}}" id="order_id_{{$count}}"/>
                     </td>
                     <td style="text-align: right">{{$out['date']}}</td>
                     <td style="text-align: right">{{$out['net_amount']}}
                         <input type="hidden" value="{{$out['net_amount']}}"  name="order_amount_{{$count}}" id="order_amount_{{$count}}"/>
                     </td>
                     <td style="text-align: center">
-                        <input type="text" style="text-align:center;" value="{{$out['net_amount']}}"  name="paid_{{$count}}" id="paid_{{$count}}" readonly="true"/>
+                        <input type="text" style="text-align:center;" value="{{$out['net_amount']-$out['paid_amount']}}"  name="paid_{{$count}}" id="paid_{{$count}}" readonly="true"/>
                     </td>
                     <td>
                         <input type="text" style="text-align:center;" name="order_amount_pay_{{$count}}" id="order_amount_pay_{{$count}}" value="0.00" readonly="true"/>
@@ -47,7 +47,7 @@
                 </tr>
                 @endforeach
                 <input type="hidden" id="totAmnt" name="totAmnt">
-                <input type="hidden" value="{{$count}}" id="order_count" name="order_count">
+                <input type="hidden" value="{{$count}}" id="invo_count" name="invo_count">
             </tbody>
         </table>
         @else

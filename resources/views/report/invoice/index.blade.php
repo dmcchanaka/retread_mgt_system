@@ -14,7 +14,7 @@
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                         <li><a href="#">Report</a></li>
-                        <li class="active">Stock Statement</li>
+                        <li class="active">Invoice Summary</li>
                     </ol>
                 </div>
             </div>
@@ -22,7 +22,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>STOCK STATEMENT REPORT</h2>
+                    <h2>INVOICE SUMMARY REPORT</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -36,12 +36,12 @@
                                         <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">TYRE NAME</label>
+                                            <label class="col-sm-3 col-form-label">CUSTOMER</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="tyre_id" name="tyre_id">
-                                                <option value="0">SELECT TYRE</option>
-                                                @foreach ($tyre as $item)
-                                                <option value="{{$item->tyre_id}}">{{$item->tyre_name}}</option>
+                                                <select class="form-control" id="cus_id" name="cus_id">
+                                                <option value="0">SELECT CUSTOMER</option>
+                                                @foreach ($customer as $item)
+                                                <option value="{{$item->cus_id}}">{{$item->customer_name}}</option>
                                                 @endforeach
                                                 </select>
                                             </div>
@@ -49,12 +49,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">CATEGORY</label>
+                                            <label class="col-sm-3 col-form-label">INVOICE NO</label>
                                             <div class="col-sm-9">
-                                                    <select class="form-control" id="cat_id" name="cat_id">
-                                                        <option value="0">SELECT CATEGORY</option>
-                                                        @foreach ($category as $cat)
-                                                        <option value="{{$cat->cat_id}}">{{$cat->cat_name}}</option>
+                                                    <select class="form-control" id="com_order_id" name="com_order_id">
+                                                        <option value="0">SELECT INVOICE</option>
+                                                        @foreach ($invoice as $inv)
+                                                        <option value="{{$inv->com_order_id}}">{{$inv->com_order_no}}</option>
                                                         @endforeach
                                                     </select>
                                             </div>
@@ -64,22 +64,17 @@
                                         <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">SUB CATEGORY</label>
+                                            <label class="col-sm-3 col-form-label">DATE FROM</label>
                                             <div class="col-sm-9">
-                                                    <select class="form-control" id="sub_cat_id" name="sub_cat_id">
-                                                        <option value="0">SELECT CATEGORY</option>
-                                                        @foreach ($subCategory as $subcat)
-                                                        <option value="{{$subcat->sub_cat_id}}">{{$subcat->sub_cat_name}}</option>
-                                                        @endforeach
-                                                    </select>
+                                                <input type="date" class="form-control has-feedback-left" id="from_date">
                                             </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label"></label>
+                                            <label class="col-sm-3 col-form-label">DATE TO</label>
                                             <div class="col-sm-9">
-                                                
+                                                <input type="date" class="form-control has-feedback-left" id="to_date">
                                             </div>
                                             </div>
                                         </div>
@@ -109,7 +104,7 @@
 
                             
                     </div>
-                    <div id="stock_details"></div>
+                    <div id="invoice_details"></div>
                     <div class="ln_solid"></div>
                 </div>
             </div>
@@ -122,15 +117,16 @@
     function search(){
         $.ajax({
             type: "GET",
-            url: "/stock_statement/search",
+            url: "/invoice_summary/search",
             data: {
-                'tyre_id': $('#tyre_id').val(),
-                'cat_id': $('#cat_id').val(),
-                'sub_cat_id': $('#sub_cat_id').val()
+                'cus_id': $('#cus_id').val(),
+                'com_order_id': $('#com_order_id').val(),
+                'from': $('#from_date').val(),
+                'to': $('#to_date').val()
             },
             cache: false,
             success: function (html) {
-                $("#stock_details").html(html).show('slow');
+                $("#invoice_details").html(html).show('slow');
             }
         });
     }

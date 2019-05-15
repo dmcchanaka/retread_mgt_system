@@ -28,4 +28,8 @@ class CompleteOrder extends Model
     public function com_order_product(){
         return $this->hasMany('App\CompleteOrderProduct','com_order_id','com_order_id');
     }
+
+    public function payment_details(){
+        return $this->hasMany('App\PaymentDetails', 'com_order_id','com_order_id');
+    }
 }

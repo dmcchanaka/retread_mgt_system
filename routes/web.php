@@ -88,9 +88,21 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('payment', 'PaymentController@index'); //Load Payment view
     Route::get('/payment/load_invoice', 'PaymentController@get_outstanding_invoice');
-    // Route::get('/load_invoice', function() {
-    // return View::make('payments/load_invoice');
-    //});
-    Route::get('stock_report', 'StockReportController@index')->name('stock_report.index');
-    Route::post('stock_report_filter', 'StockReportController@filter')->name('stock_report.filter');
+    Route::get('/payment/outstanding', 'PaymentController@get_outstanding_amount');
+    Route::post('add_payment', 'PaymentController@store');
+    Route::get('view_payments', 'PaymentController@create')->name('view_payments'); // View Added Payments
+    Route::get('/display_payment/{id}', 'PaymentController@show'); //Get Payment details for display
+
+    Route::get('stock_statement', 'StockReportController@index')->name('stock_report.index');
+    Route::get('stock_statement/search', 'StockReportController@search');
+    // Route::post('search_stock_statement', 'StockReportController@search')->name('stock_report.search');
+
+    Route::get('invoice_summary', 'InvoiceSummaryReportController@index')->name('invoice.index');
+    Route::get('invoice_summary/search', 'InvoiceSummaryReportController@search');
+
+    Route::get('outstanding_summary', 'OutstandingSummaryController@index')->name('outstanding.index');
+    Route::get('outstanding_summary/search', 'OutstandingSummaryController@search');
+
+
+    Route::get('permission', 'PermissionController@index');
 });

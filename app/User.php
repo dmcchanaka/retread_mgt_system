@@ -35,4 +35,12 @@ class User extends Authenticatable
         return $this->belongsTo('App\UserType', 'u_tp_id', 'u_tp_id');
     }
 
+    public function permission_group(){
+        return $this->belongsTo('App\PermissionGroup', 'pg_id', 'pg_id');
+    }
+
+    public function user_permission(){
+        return $this->hasMany('App\UserPermission','pg_id','pg_id');
+    }
+
 }
