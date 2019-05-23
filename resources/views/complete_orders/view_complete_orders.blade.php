@@ -58,14 +58,22 @@
                                 <td style="text-align:right;padding-right:5px">{{number_format($values->discount_per,2)}}</td>
                                 <td style="text-align:right;padding-right:5px">{{number_format($values->com_order_amount-$values->discount,2)}}</td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '34')
                                     <span class="pull-right-container">@if($values->complete_status != '1')
                                         <a href="{{url('display_completeorder', $values->com_order_id)}}" target="_blank"><i class="glyphicon glyphicon-modal-window"></i></a>
                                     @endif</span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '35')
                                     <span class="pull-right-container">
                                         <a href="{{url('print_order',$values->com_order_id )}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </span>
+                                    @endif
+                                    @endforeach
                                 </td>
                             </tr>
                             @endforeach

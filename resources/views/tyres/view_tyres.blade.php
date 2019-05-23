@@ -43,9 +43,13 @@
                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
                             @include('flash-message')
                             <div style="padding-right:20px;text-align:right">
+                                @foreach (Auth::user()->user_permission as $per)
+                                @if($per->per_id == '10')
                                 <button type="button" class="btn">
                                     <a href="{{url('tyres')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Tyre</a>
                                 </button>
+                                @endif
+                                @endforeach
                             </div>
                             @if (sizeof($tyres) > 0)
                             <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap table table-striped jambo_table bulk_action" cellspacing="0" width="100%">
@@ -65,14 +69,22 @@
                                         <td>{{$tt->tyre_size}}</td>
                                         <td>{{$tt->manufacture->manufacture_name}}</td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '11')
                                             <span class="pull-right-container">
                                                 <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '12')
                                             <span class="pull-right-container">
                                                 <a href="" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                     </tr>
                                     @endforeach
@@ -83,9 +95,13 @@
                         <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                             @include('flash-message')
                             <div style="padding-right:20px;text-align:right">
+                                @foreach (Auth::user()->user_permission as $per)
+                                @if($per->per_id == '13')
                                 <button type="button" class="btn">
                                     <a href="" data-toggle="modal" data-target="#myModalHorizontal" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Tire Category</a>
                                 </button>
+                                @endif
+                                @endforeach
                             </div>
                             <!-- Small modal -->
                             <!-- Modal -->
@@ -146,14 +162,22 @@
                                     <tr id="{{$cat->cat_id}}">
                                         <td>{{$cat->cat_name}}</td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '14')
                                             <span class="pull-right-container">
                                             <a href="#" class="popup_edit" id="{{$cat->cat_id}}" ><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '15')
                                             <span class="pull-right-container">
                                             <a class="delete_record" id="{{$cat->cat_id}}" ><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                     </tr>
                                     @endforeach
@@ -164,9 +188,13 @@
                         <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
                             @include('flash-message')
                             <div style="padding-right:20px;text-align:right">
+                                @foreach (Auth::user()->user_permission as $per)
+                                @if($per->per_id == '16')
                                 <button type="button" class="btn">
                                     <a href="" data-toggle="modal" data-target="#myModalHorizontal_two" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Tire Category</a>
                                 </button>
+                                @endif
+                                @endforeach
                             </div>
                             <!-- Modal -->
                             <div class="modal fade" id="myModalHorizontal_two" tabindex="-1" role="dialog"
@@ -237,14 +265,22 @@
                                         <td>{{$subcat->belt_category->cat_name}}</td>
                                         <td>{{$subcat->sub_cat_name}}</td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '17')
                                             <span class="pull-right-container">
                                             <a href="#" class="sub_category_edit" id="{{$subcat->sub_cat_id}}" ><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                         <td style="text-align: center;cursor: pointer">
+                                            @foreach (Auth::user()->user_permission as $per)
+                                            @if($per->per_id == '18')
                                             <span class="pull-right-container">
                                             <a class="delete_record" id="{{$subcat->sub_cat_id}}" ><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
+                                            @endif
+                                            @endforeach
                                         </td>
                                     </tr>
                                     @endforeach

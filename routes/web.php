@@ -105,4 +105,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('permission', 'PermissionController@index');
+    Route::post('save_parmission', 'PermissionController@store');
+    Route::get('view_parmissions', 'PermissionController@create')->name('view_parmission'); // View Added Payments
+    Route::get('display_permission/{id}', 'PermissionController@show');
+    Route::get('edit_permission/{id}', 'PermissionController@edit');
+    Route::post('update_parmission/{id}', 'PermissionController@update'); //Update Edited Sales Order
+    Route::get('delete_permission/{id}', 'PermissionController@destroy');
+
 });

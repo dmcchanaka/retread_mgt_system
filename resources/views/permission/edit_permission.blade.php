@@ -15,7 +15,7 @@
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                         <li><a href="#">Permission Management</a></li>
-                        <li class="active">Assignment</li>
+                        <li class="active">Edit</li>
                     </ol>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 @include('flash-message')
                 <div class="x_content">
                     <div class="x_panel">
-                        <form class="form-horizontal form-label-left" action="{{url('save_parmission')}}" method="post" name="permission_form" id="permission_form"">
+                        <form class="form-horizontal form-label-left" action="{{url('update_parmission/'.$permissionGroup->pg_id)}}" method="post" name="permission_form" id="permission_form"">
                             @csrf
                             <div class="row profile_details text-center">
                                 <div class="well profile_view">
@@ -37,7 +37,7 @@
                                         <label class="control-label col-md-5" for="">PERMISSION GROUP <span class="required"></span>
                                         </label>
                                         <div class="col-md-6">
-                                            <input type="text" id="per_group" name="per_group" required="required" class="form-control col-md-2 col-xs-10">
+                                        <input type="text" id="per_group" name="per_group" required="required" value="{{$permissionGroup->group_name}}" class="form-control col-md-2 col-xs-10">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -47,7 +47,7 @@
                                             <select id="user_type" class="form-control" name="user_type">
                                                 <option value="-1">Select User Type</option>
                                                 @foreach ($userType as $ut)
-                                                <option value="{{$ut->u_tp_id}}">{{$ut->user_type}}</option>
+                                                <option value="{{$ut->u_tp_id}}" <?php if($permissionGroup->u_tp_id == $ut->u_tp_id){ echo 'selected'; } ?>>{{$ut->user_type}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -82,8 +82,18 @@
                                                     </td>
                                                     <td>&nbsp;</td>
                                                     <td>
-                                                    <input type="checkbox" id="main_ckbox_{{$count}}" name="main_ckbox_{{$count}}" onclick="handle_main_Click('<?php echo $count; ?>');"/>
-                                                    <input type="hidden" id="main_status_{{$count}}" name="main_status_{{$count}}" value="0" />
+                                                    <input type="checkbox" id="main_ckbox_{{$count}}" name="main_ckbox_{{$count}}" onclick="handle_main_Click('<?php echo $count; ?>');" 
+                                                    @foreach ($userPermission as $assignedPer) 
+                                                    @if($mp['main_per_id'] == $assignedPer['per_id']) checked=checked @endif
+                                                    @endforeach
+                                                    />
+                                                    <input type="hidden" id="main_status_{{$count}}" name="main_status_{{$count}}" 
+                                                    value="<?php
+                                                    foreach ($userPermission as $assignedPer){
+                                                        if($mp['main_per_id'] == $assignedPer['per_id']){ echo '1'; }else{ echo ''; }
+                                                    }
+                                                    ?>"
+                                                    />
                                                     </td>
                                                 </tr>
                                                 @php
@@ -100,8 +110,22 @@
                                                     <input type="hidden" id="sub_sec_id_{{$count}}_{{$sub_count}}" name="sub_sec_id_{{$count}}_{{$sub_count}}" value="{{$sub['sub_sec_id']}}"/>
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" id="sub_ckbox_{{$count}}_{{$sub_count}}" name="sub_ckbox_{{$count}}_{{$sub_count}}" onclick="handle_sub_Click('<?php echo $count; ?>','<?php echo $sub_count; ?>');"/>
-                                                        <input type="hidden" id="sub_status_{{$count}}_{{$sub_count}}" name="sub_status_{{$count}}_{{$sub_count}}" value="0" />
+                                                        <input type="checkbox" id="sub_ckbox_{{$count}}_{{$sub_count}}" name="sub_ckbox_{{$count}}_{{$sub_count}}" onclick="handle_sub_Click('<?php echo $count; ?>','<?php echo $sub_count; ?>');"
+                                                        @foreach ($userPermission as $assignedPer) 
+                                                        @foreach ($assignedPer['subSection'] as $assignSub)
+                                                        @if($sub['sub_sec_id'] == $assignSub['sub_per_id']) checked=checked @endif
+                                                        @endforeach
+                                                        @endforeach 
+                                                        />
+                                                        <input type="hidden" id="sub_status_{{$count}}_{{$sub_count}}" name="sub_status_{{$count}}_{{$sub_count}}" 
+                                                        value="<?php
+                                                            foreach ($userPermission as $assignedPer){ 
+                                                                foreach ($assignedPer['subSection'] as $assignSub){
+                                                                if($sub['sub_sec_id'] == $assignSub['sub_per_id']){ echo '1'; }
+                                                                }
+                                                            }
+                                                        ?>"
+                                                         />
                                                     </td>
                                                 </tr>    
                                                 @endforeach   

@@ -49,16 +49,28 @@
                                 <div class="btn-group" data-toggle="buttons">
                                     <select class="form-control" id="u_type" name="u_type">>
                                         <option value="0">Select User Type</option>
-                                        <option value="2" {{ $user->u_tp_id== 2 ? 'selected="selected"' : '' }}>Manager</option>
-                                        <option value="3" {{ $user->u_tp_id== 3 ? 'selected="selected"' : '' }}>clerk</option>
-                                        <option value=4" {{ $user->u_tp_id== 4 ? 'selected="selected"' : '' }}>production</option>
-                                        <option value="5" {{ $user->u_tp_id== 5 ? 'selected="selected"' : '' }}>sales representative</option>
+                                        @foreach ($userType as $ut)
+                                    <option value="{{$ut->u_tp_id}}" {{ $user->u_tp_id==$ut->u_tp_id ? 'selected="selected"' : '' }}>{{$ut->user_type}}</option>
+                                        @endforeach
                                     </select>
                                     @if ($errors->has('u_tp_id'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('u_tp_id') }}</strong>
                                     </span>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Permission Group</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <select class="form-control" id="permission" name="permission">>
+                                        <option value="0">Select Permission Group</option>
+                                        @foreach ($permissionGroup as $pg)
+                                    <option value="{{$pg->pg_id}}" {{ $user->pg_id==$pg->pg_id ? 'selected="selected"' : '' }}>{{$pg->group_name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

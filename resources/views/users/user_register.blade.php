@@ -105,16 +105,29 @@
                                 <div class="btn-group" data-toggle="buttons">
                                     <select class="form-control" id="user_type" name="user_type">
                                         <option value="0">SELECT</option>
-                                        <option value="2">Manager</option>
-                                        <option value="3">clerk</option>
-                                        <option value="4">production</option>
-                                        <option value="5">sales representative</option>
+                                        @foreach ($userType as $ut)
+                                        <option value="{{$ut->u_tp_id}}">{{$ut->user_type}}</option>
+                                        @endforeach
                                     </select>
                                     @if ($errors->has('user_type'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('user_type') }}</strong>
                                     </span>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 col-form-label" for="user-type">Permission Group <span class="required"></span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <select class="form-control" id="permission_id" name="permission_id">
+                                        <option value="0">SELECT</option>
+                                        @foreach ($permissionGroup as $pg)
+                                    <option value="{{$pg->pg_id}}">{{$pg->group_name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

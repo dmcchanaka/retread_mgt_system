@@ -84,6 +84,9 @@
                                         </li>
                                         @endif
                                     @endforeach
+                                    @if (Auth::user()->u_tp_id == 1)
+                                    <li><a href="{{url('view_parmissions')}}"><i class="fa fa-wrench"></i>User Permission</a></li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>

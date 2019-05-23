@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
+use App\UserType;
+use App\PermissionGroup;
+
 class UserController extends Controller {
 
     /**
@@ -16,7 +19,9 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('users.user_register');
+        $userType = UserType::all();
+        $permissionGroup = PermissionGroup::all();
+        return view('users.user_register',['userType'=>$userType,'permissionGroup'=>$permissionGroup]);
     }
 
     /**
@@ -54,6 +59,7 @@ class UserController extends Controller {
         $user->address = $request->get('address');
         $user->password = Hash::make($request->get('password'));
         $user->u_tp_id = $request->get('user_type');
+        $user->pg_id = $request->get('permission');
         $user->save();
         return redirect('view_users')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
     }
@@ -71,7 +77,9 @@ class UserController extends Controller {
     
     public function edit_user($id) {
         $users = User::find($id);
-        return view('users.edit_users', ['user' => $users]);
+        $userType = UserType::all();
+        $permissionGroup = PermissionGroup::all();
+        return view('users.edit_users', ['user' => $users,'userType'=>$userType,'permissionGroup'=>$permissionGroup]);
     }
     public function update_user($id, $name){
         
@@ -119,6 +127,7 @@ class UserController extends Controller {
         $user->address = $request->get('address');
         $user->password = Hash::make($request->get('password'));
         $user->u_tp_id = $request->get('u_type');
+        $user->pg_id = $request->get('permission');
         $user->save();
         return redirect('view_users')->with('success', 'RECORD HAS BEEN SUCCESSFULLY INSERTED!');
     }

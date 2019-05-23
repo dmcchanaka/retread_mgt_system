@@ -30,9 +30,13 @@
                 </div>
                 @include('flash-message')
                 <div style="padding-right:20px;text-align:right">
+                    @foreach (Auth::user()->user_permission as $per)
+                    @if($per->per_id == '27')
                     <button type="button" class="btn">
                     <a href="{{url('orders')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Order</a>
                     </button>
+                    @endif
+                    @endforeach
                 </div>
                 <div class="x_content">
                     <?php
@@ -64,29 +68,49 @@
                                 <td style="text-align:right;padding-right:5px">{{number_format($values->discount_per,2)}}</td>
                                 <td style="text-align:right;padding-right:5px">{{number_format($values->order_amount-$values->discount,2)}}</td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '28')
                                     <span class="pull-right-container">
                                         <a href="{{url('display_order',$values->order_id )}}" target="_blank"><i class="glyphicon glyphicon-modal-window"></i></a>
                                     </span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '29')
                                     <span class="pull-right-container">@if($values->complete_status != '1')
                                         <a href="{{url('edit_order',$values->order_id)}}" target="_blank"><i class="glyphicon glyphicon-pencil"></i></a>
                                     @endif</span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '30')
                                     <span class="pull-right-container">@if($values->complete_status != '1')
                                         <a href="{{url('complete_order', $values->order_id)}}" target="_blank"><i class="glyphicon glyphicon-check"></i></a>
                                     @endif</span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '31')
                                     <span class="pull-right-container">
                                         <a href="{{url('print_order',$values->order_id )}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '32')
                                     <span class="pull-right-container">@if($values->complete_status != '1')
                                         <a href="{{url('delete_order/'.$values->order_id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                     @endif</span>
+                                    @endif
+                                    @endforeach
                                 </td>
                             </tr>
                             @endforeach

@@ -30,9 +30,13 @@
                 </div>
                 @include('flash-message')
                 <div style="padding-right:20px;text-align:right">
+                    @foreach (Auth::user()->user_permission as $per)
+                    @if($per->per_id == '20')
                     <button type="button" class="btn">
                     <a href="{{url('prices')}}" style="color:white"><span class="glyphicon glyphicon-plus" style="color:#5A738E"></span> Add New Price</a>
                     </button>
+                    @endif
+                    @endforeach
                 </div>
                 <div class="x_content">
                     <?php
@@ -61,14 +65,22 @@
                                   <td style="text-align:right">{{$values->rp_price}}</td>
                                   <td style="text-align:right">{{$values->cus_price}}</td>
                                   <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '21')
                                     <span class="pull-right-container">
                                         <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
                                     </span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                 <td style="text-align: center;cursor: pointer">
+                                    @foreach (Auth::user()->user_permission as $per)
+                                    @if($per->per_id == '22')
                                     <span class="pull-right-container">
                                         <a href="" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                     </span>
+                                    @endif
+                                    @endforeach
                                 </td>
                                   </tr>
                               @endforeach
