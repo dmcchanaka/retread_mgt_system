@@ -62,6 +62,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/orders/customers', 'TyreordersController@search_customers'); //Auto complete get customers
     Route::get('/tyres/batch_numbers', 'TyreordersController@get_batchno'); //load batch numbers
     Route::get('/tyres/cus_prices', 'TyreordersController@get_cus_prices'); //load customer prices
+    Route::get('/orders/remain_credit_limit', 'TyreordersController@search_customer_credit_amount'); //Auto complete get customers
+    Route::get('/orders/customer_credit_limit', 'TyreordersController@search_customer_credit_limit'); //Auto complete get customers
 
     Route::post('add_salesorder', 'TyreordersController@store'); //Save Sales Order
     Route::get('view_orders', 'TyreordersController@create')->name('view_orders'); // View Added Orders
@@ -85,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add_completeorder', 'CompleteOrderController@store'); // Load complete orders view
     Route::get('view_completeorders', 'CompleteOrderController@index'); // View added complete orders
     Route::get('display_completeorder/{id}', 'CompleteOrderController@show'); // Display complete orders
+    Route::get('/print_invoice/{id}', 'CompleteOrderController@print_invoice'); //Print Complete Sales Orders
 
     Route::get('payment', 'PaymentController@index'); //Load Payment view
     Route::get('/payment/load_invoice', 'PaymentController@get_outstanding_invoice');
@@ -92,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add_payment', 'PaymentController@store');
     Route::get('view_payments', 'PaymentController@create')->name('view_payments'); // View Added Payments
     Route::get('/display_payment/{id}', 'PaymentController@show'); //Get Payment details for display
+    Route::get('/print_payment/{id}', 'PaymentController@print_payment'); //Print Payments
 
     Route::get('stock_statement', 'StockReportController@index')->name('stock_report.index');
     Route::get('stock_statement/search', 'StockReportController@search');

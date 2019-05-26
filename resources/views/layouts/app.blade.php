@@ -79,6 +79,7 @@
                                         <li><a><i class="fa fa-book"></i> Report <span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                             <li><a href="{{route('invoice.index')}}">Invoice Summary Report</a></li>
+                                            <li><a href="{{route('outstanding.index')}}">Outstanding Summary Report</a></li>
                                             <li><a href="{{route('stock_report.index')}}">Stock Report</a></li>
                                             </ul>
                                         </li>

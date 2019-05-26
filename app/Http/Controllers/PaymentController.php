@@ -10,6 +10,7 @@ use App\Belt_price;
 use App\Payment;
 use App\PaymentDetails;
 use App\PaymentCheque;
+use PDF;
 
 class PaymentController extends Controller {
 
@@ -181,7 +182,7 @@ class PaymentController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        $payment = Payment::find($id);
+        $payment = Payment::with('customer')->find($id);
         $paymentDetails = DB::table('payment AS p')
         ->join('payment_details AS pd','p.pay_id','=','pd.pay_id')
         ->join('complete_orders AS co','co.com_order_id','=','pd.com_order_id')
@@ -193,6 +194,23 @@ class PaymentController extends Controller {
         ->get();
         $PaymentCheque = PaymentCheque::where('pay_id','=',$id)->get();
         return view('payments.display_payment', ['payment' => $payment,'paymentDetails'=>$paymentDetails,'paymentCheque'=>$PaymentCheque]);
+    }
+
+    public function print_payment($id){
+        $payment = Payment::find($id);
+        $paymentDetails = DB::table('payment AS p')
+        ->join('payment_details AS pd','p.pay_id','=','pd.pay_id')
+        ->join('complete_orders AS co','co.com_order_id','=','pd.com_order_id')
+        ->select([
+            'co.com_order_no',
+            'pd.paid_amount'
+        ])
+        ->where('p.pay_id','=',$id)
+        ->get();
+        $PaymentCheque = PaymentCheque::where('pay_id','=',$id)->get();
+        $pdf = PDF::loadView('payments.print_payment', compact('payment', 'paymentDetails','paymentCheque'));
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('receipt.pdf');
     }
 
     /**

@@ -9,7 +9,7 @@
 
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+        <!-- Bootstrap -->
         <style>
             .text-right {
                 text-align: right;

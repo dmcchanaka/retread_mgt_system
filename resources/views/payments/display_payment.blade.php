@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">PAYMENT Management</a></li>
+                        <li><a href="#">Payment Management</a></li>
                         <li class="active">View</li>
                     </ol>
                 </div>
@@ -25,7 +25,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>PAYMENT Information<small></small></h2>
+                    <h2>Payment Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_panel">

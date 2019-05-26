@@ -58,6 +58,28 @@
                                             <input type="hidden" id="cus_id" name="cus_id" />
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" for="">CREDIT LIMIT <span class="required"></span>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input type="text" id="credit_limit" name="credit_limit" required="required" class="form-control col-md-2 col-xs-10" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" for="">TOTAL OUTSTANDING <span class="required"></span>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input type="text" id="tot_outstanding" name="tot_outstanding" required="required" class="form-control col-md-2 col-xs-10" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" for="">AVAILALE CREDIT LIMIT <span class="required"></span>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input type="text" id="avai_credit_limit" name="avai_credit_limit" required="required" class="form-control col-md-2 col-xs-10" readonly>
+                                            <input type="hidden" id="old_acl" name="old_acl" required="required" class="form-control col-md-2 col-xs-10" value="">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -216,6 +238,54 @@
                                                 select: function (event, ui) {
                                                     $("#cus_name").val(ui.item.label);
                                                     $("#cus_id").val(ui.item.id);
+                                                    if(ui.item.id !='' || ui.item.id !=0){
+                                                        display_credit_limit(ui.item.id);
+                                                        remain_credit_limit(ui.item.id);
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                        /*DISPLAY CREDIT LIMIT*/
+                                        function display_credit_limit(cus_id){
+                                            $.ajaxSetup({
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                }
+                                            });
+                                            $.ajax({
+                                                type: "GET",
+                                                url: '/orders/customer_credit_limit',
+                                                data: {
+                                                    cus_id: cus_id
+                                                },
+                                                success: function (data) {
+                                                    $('#credit_limit').val(data['credit_amount']);
+                                                }
+                                            });
+                                            remain_credit_limit(cus_id);
+                                        }
+
+                                        /*DISPLAY REMAIN OUTSTANDING*/
+                                        function remain_credit_limit(cus_id){
+                                            $.ajaxSetup({
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                }
+                                            });
+                                            $.ajax({
+                                                type: "GET",
+                                                url: '/orders/remain_credit_limit',
+                                                data: {
+                                                    cus_id: cus_id
+                                                },
+                                                success: function (data) {
+                                                    $('#tot_outstanding').val(data);
+                                                    
+                                                    var credit_limit = parseFloat($('#credit_limit').val());
+                                                    var remain_climit = credit_limit - data;
+                                                    $('#avai_credit_limit').val(remain_climit);
+                                                    $('#old_acl').val(remain_climit);
                                                 }
                                             });
                                         }
@@ -430,7 +500,31 @@
                                                 $('#qty_' + i).val(0);
                                             }
                                             calc_amount();
+
+                                            setTimeout(function(){ 
+                                                check_credit_limit(i);
+                                             }, 1000);
                                         }
+
+                                        function check_credit_limit(i){
+                                            //check chredit limit
+                                            var credit_limit = parseFloat($('#credit_limit').val());
+                                            var outstanding = parseFloat($('#tot_outstanding').val());
+                                            var net_amount = parseFloat($('#net_amount').val());
+                                            var old_avai_credit = parseFloat($('#old_acl').val());
+
+                                            var remain_crlmt = credit_limit - (outstanding + net_amount);
+                                            var remain_without_ntamt = credit_limit - outstanding;
+                                            // console.log(credit_limit+' -- '+outstanding+' -- '+net_amount +' -- '+ remain_crlmt + ' -- '+ old_avai_credit);
+
+                                            if(net_amount >= old_avai_credit){
+                                                alert('credit limit is not enough');
+                                                remove_item(i);
+                                            }else{
+                                                $('#avai_credit_limit').val(remain_crlmt);
+                                            }
+                                        }
+
                                         Number.prototype.formatMoney = function (c, d, t) {
                                             var n = this,
                                                     c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -476,6 +570,7 @@
                                                 net_amount = (tot_amount * (100 - parseFloat($('#whole_dis').val()))) / 100;
                                             }
                                             $('#net_amount').val(net_amount.formatMoney(2, '.', ','));
+                                            
                                         }
 
                                         function tyre_order_validation() {

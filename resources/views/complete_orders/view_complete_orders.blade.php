@@ -70,7 +70,7 @@
                                     @foreach (Auth::user()->user_permission as $per)
                                     @if($per->per_id == '35')
                                     <span class="pull-right-container">
-                                        <a href="{{url('print_order',$values->com_order_id )}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a href="{{url('print_invoice',$values->com_order_id )}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </span>
                                     @endif
                                     @endforeach

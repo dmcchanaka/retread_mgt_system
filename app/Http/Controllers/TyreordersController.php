@@ -109,6 +109,40 @@ class TyreordersController extends Controller {
         return $pdf->stream('invoice.pdf');
     }
 
+    public function search_customer_credit_amount(Request $request){
+        $outstandingInv = CompleteOrder::with('com_order_product','payment_details')->where('cus_id','=',$request->cus_id)->get();
+        $outstandingInv->transform(function($out) {
+            $line_amt = 0;
+            $discount = 0;
+            $net_amount = 0;
+            $grand_total = 0;
+            foreach ($out->com_order_product AS $pro) {
+                $price = Belt_price::where('price_id', '=', $pro->price_id)
+                        ->where('tyre_id', '=', $pro->tyre_id)->first();
+                $line_amt += ($pro->qty * $price->cus_price) - (($pro->qty * $price->cus_price) * $pro->discount_per) / 100;
+            }
+            $discount = ($line_amt * $out->discount_per) / 100;
+            $net_amount = $line_amt - $discount;
+            $grand_total += $net_amount;
+
+            //calc payment
+            $paid_amt = 0;
+            foreach ($out->payment_details AS $pay) {
+                $paid_amt += $pay->paid_amount;
+            }
+            $grand_total = $grand_total - $paid_amt;
+            return [
+                'net_amount' => $grand_total
+            ];
+        });
+        return $outstandingInv->sum('net_amount');
+    }
+
+    public function search_customer_credit_limit(Request $request){
+        $customer = Customer::find($request->cus_id);
+        return $customer;
+    }
+
     /**
      * Display the specified resource.
      *
@@ -158,7 +192,7 @@ class TyreordersController extends Controller {
 
     public static function search_customers(Request $request) {
         $term = $request->term;
-        $customers = Customer::select('customer_name AS label', 'cus_id AS id')
+        $customers = Customer::select('customer_name AS label', 'cus_id AS id','credit_amount AS credit_amount')
                 ->where('customer_name', 'LIKE', '%' . $term . '%')
                 ->get();
         return $customers;

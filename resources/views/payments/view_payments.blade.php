@@ -5,7 +5,7 @@
 <div class="row">
     <div class="page-title">
         <div class="title_left">
-            <h3> COMPLETE Order Management</h3>
+            <h3> PAYMENT Management</h3>
         </div>
 
         <div class="title_right">
@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Complete Order Management</a></li>
+                        <li><a href="#">Payment Management</a></li>
                         <li class="active">View</li>
                     </ol>
                 </div>
@@ -25,7 +25,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Complete Order Information<small></small></h2>
+                    <h2>Payment Information<small></small></h2>
                     <div class="clearfix"></div>
                 </div>
                 @include('flash-message')

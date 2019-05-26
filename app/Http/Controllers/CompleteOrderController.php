@@ -11,6 +11,7 @@ use App\CompleteOrderProduct;
 use App\Tyre_orders;
 use App\RecievedBelt;
 use App\Mail\CompleteOrderMail;
+use PDF;
 
 class CompleteOrderController extends Controller {
 
@@ -119,6 +120,14 @@ class CompleteOrderController extends Controller {
         $order = CompleteOrder::with('customer','tyre_order')->find($id);
         $orderDetails = CompleteOrderProduct::with('tyre', 'price')->where('com_order_id', '=', $id)->get();
         return view('complete_orders.display_complete_order',['order'=>$order,'orderDetails' => $orderDetails]);
+    }
+
+    public function print_invoice($id){
+        $order = CompleteOrder::with('customer','tyre_order')->find($id);
+        $orderDetails = CompleteOrderProduct::with('tyre', 'price')->where('com_order_id', '=', $id)->get();
+        $pdf = PDF::loadView('complete_orders.print_invoice', compact('order', 'orderDetails'));
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('invoice.pdf');
     }
 
     /**
