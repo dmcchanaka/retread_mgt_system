@@ -10,6 +10,8 @@ use App\CompleteOrder;
 use App\CompleteOrderProduct;
 use App\Tyre_orders;
 use App\RecievedBelt;
+use App\Customer;
+use App\Belt_price;
 use App\Mail\CompleteOrderMail;
 use PDF;
 
@@ -96,9 +98,34 @@ class CompleteOrderController extends Controller {
                 
                 /*send email notification*/
                 $customer = Customer::find($request->cus_id);
+                $invDetails = CompleteOrder::with('com_order_product')->where('com_order_id','=',$lastOrder->com_order_id)->get();
+                $invDetails->transform(function($out) {
+                    $line_amt = 0;
+                    $discount = 0;
+                    $gross_amt = 0;
+                    $net_amount = 0;
+                    foreach ($out->com_order_product AS $pro) {
+                        $price = Belt_price::where('price_id', '=', $pro->price_id)
+                                ->where('tyre_id', '=', $pro->tyre_id)->first();
+                        $line_amt += ($pro->qty * $price->cus_price) - (($pro->qty * $price->cus_price) * $pro->discount_per) / 100;
+                    }
+                    $gross_amt = $line_amt;
+                    $discount = ($line_amt * $out->discount_per) / 100;
+                    $net_amount = $line_amt - $discount;
+
+                    return [
+                        'inv_net' => $net_amount,
+                        'inv_gross' => $net_amount,
+                        'inv_discount' => $discount
+                    ];
+                });
                 $data = [
                     'name' => $customer->customer_name,
-                    "message" => "Your tyre order has been collected successfully. it will be processing withing next few days. invoice no is " . $lastOrder->order_no
+                    "inv_no" => $lastOrder->com_order_no,
+                    "inv_gross" =>$invDetails[0]['inv_gross'],
+                    "inv_discount" =>$invDetails[0]['inv_discount'],
+                    "inv_net" =>$invDetails[0]['inv_net'],
+                    "message" => "Your Tire order is now ready for collection. you may come over at the branch during standard working hours or memtion days and times for the collection of the order"
                 ];
                 Mail::to($customer->email)->send(new CompleteOrderMail($data));
             }

@@ -38,7 +38,7 @@ class CustomerController extends Controller {
                     'name' => 'required|string|max:255',
                     'cus_type'=> 'required|not_in:0',
                     'email' => 'required|string|email|max:255|unique:customers',
-                    'gender' => 'required|not_in:0',
+                    // 'gender' => 'required|not_in:0',
                     'nic' => 'required|unique:customers',
                     'telephone' => 'required'
         ]);
@@ -53,7 +53,7 @@ class CustomerController extends Controller {
         $customer->email = $request->get('email');
         $customer->nic = $request->get('nic');
         $customer->mobile_no = $request->get('telephone');
-        $customer->gender = $request->get('gender');
+        // $customer->gender = $request->get('gender');
         $customer->address = $request->get('address');
         $customer->credit_limit_availability = $request->get('chk_status');
         $customer->credit_amount = $request->get('credit_limit');
@@ -101,7 +101,7 @@ class CustomerController extends Controller {
         $validator = Validator::make($request->all(), [
                     'name' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255',
-                    'gender' => 'required|not_in:0',
+                    // 'gender' => 'required|not_in:0',
                     'nic' => 'required',
                     'telephone' => 'required'
         ]);
@@ -112,9 +112,9 @@ class CustomerController extends Controller {
         
         $customer = Customer::find($id);
         $customer->customer_name = $request->get('name');
-        $customer->gender = $request->get('gender');
+        // $customer->gender = $request->get('gender');
         $customer->nic = $request->get('nic');
-        $customer->telephone = $request->get('telephone');
+        $customer->mobile_no = $request->get('telephone');
         $customer->email = $request->get('email');
         $customer->address = $request->get('address');
         $customer->save();

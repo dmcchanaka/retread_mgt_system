@@ -63,6 +63,7 @@
                                         </label>
                                         <div class="col-md-6">
                                             <input type="text" id="credit_limit" name="credit_limit" required="required" class="form-control col-md-2 col-xs-10" readonly>
+                                            <input type="hidden" id="credit_limit_available" name="credit_limit_available">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -260,7 +261,14 @@
                                                     cus_id: cus_id
                                                 },
                                                 success: function (data) {
-                                                    $('#credit_limit').val(data['credit_amount']);
+                                                    console.log('aaaaaa '+ data['credit_amount']);
+                                                    var crdt_lmt = 0;
+                                                    if(data['credit_amount']!= null){
+                                                        $('#credit_limit').val(data['credit_amount']);
+                                                    }else{
+                                                        $('#credit_limit').val('0');
+                                                    }
+                                                    $('#credit_limit_available').val(data['credit_limit_availability']);
                                                 }
                                             });
                                             remain_credit_limit(cus_id);
@@ -283,7 +291,14 @@
                                                     $('#tot_outstanding').val(data);
                                                     
                                                     var credit_limit = parseFloat($('#credit_limit').val());
-                                                    var remain_climit = credit_limit - data;
+                                                    
+                                                    if(credit_limit !=''){
+                                                        var remain_climit = credit_limit - data;
+                                                    } else {
+                                                        var remain_climit = 0;
+                                                    }
+                                                    console.log(credit_limit +'--'+data);
+                                                    
                                                     $('#avai_credit_limit').val(remain_climit);
                                                     $('#old_acl').val(remain_climit);
                                                 }
@@ -517,11 +532,13 @@
                                             var remain_without_ntamt = credit_limit - outstanding;
                                             // console.log(credit_limit+' -- '+outstanding+' -- '+net_amount +' -- '+ remain_crlmt + ' -- '+ old_avai_credit);
 
+                                            if($('#credit_limit_available').val()== '1'){
                                             if(net_amount >= old_avai_credit){
                                                 alert('credit limit is not enough');
                                                 remove_item(i);
                                             }else{
                                                 $('#avai_credit_limit').val(remain_crlmt);
+                                            }
                                             }
                                         }
 

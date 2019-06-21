@@ -46,7 +46,6 @@
                             <thead>
                                 <tr class="headings">
                                     <th style="text-align: center" class="column-title">Name</th>
-                                    <th style="text-align: center" class="column-title">Gender</th>
                                     <th style="text-align: center">NIC</th>
                                     <th style="text-align: center">Mobile No</th>
                                     <th style="text-align: center">Address</th>
@@ -68,9 +67,8 @@
                                     ?>
                                     <tr>
                                         <td><?php echo $con->customer_name; ?></td>
-                                        <td><?php echo $con->gender; ?></td>
                                         <td><?php echo $con->nic; ?></td>
-                                        <td><?php echo $con->telephone; ?></td>
+                                        <td><?php echo $con->mobile_no; ?></td>
                                         <td><?php echo $con->address; ?></td>
                                         <td><?php echo $con->email; ?></td>
                                         <td style="text-align: center"><?php if ($con->con_status == 0) { ?><span style="color: green;"><?php echo $con_status; ?></span><?php }else{ ?><span style="color: red;"><?php echo $con_status; ?></span><?php }?></td>
@@ -78,7 +76,7 @@
                                             @foreach (Auth::user()->user_permission as $per)
                                             @if($per->per_id == '7')
                                             <span class="pull-right-container">
-                                                <a href="{{url('edit_customer/'.$con->id)}}"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a href="{{url('edit_customer/'.$con->cus_id)}}"><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
                                             @endif
                                             @endforeach

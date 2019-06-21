@@ -143,6 +143,15 @@ class TyreController extends Controller
         Belt_category::find($id)->delete();
     }
 
+    public function destroySubCategory($id)
+    {
+        Belt_subcategory::find($id)->delete();
+    }
+
+    public function destroyTire($id){
+        Tyre::find($id)->delete();
+    }
+
     public function addSubcatogory(Request $request)
     {
         Belt_subcategory::create([
@@ -169,4 +178,17 @@ class TyreController extends Controller
         $tyresubcat->save();
     }
 
+    public function showTires(Request $request){
+        $tire = Tyre::find($request->get('id'));
+        return $tire;
+    }
+
+    public function updateTires(Request $request)
+    {
+        $tire = Tyre::find($request->get('tire_id'));
+        $tire->tyre_name = $request->get('name');
+        $tire->tyre_size = $request->get('t_size');
+        $tire->manufac_id = $request->get('manufacturer');
+        $tire->save();
+    }
 }

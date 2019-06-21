@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('css')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" /> --}}
+<link href="../css/jquery-ui.min.css" rel="stylesheet"/>
 @endsection
 @section('content')
 <div class="row">
@@ -99,7 +100,8 @@
 </div>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
+<script src="../js/jquery-ui.min.js"></script>
 <script type="text/javascript">
                                                     $(document).ready(function () {
 

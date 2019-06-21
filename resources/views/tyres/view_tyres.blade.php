@@ -72,7 +72,7 @@
                                             @foreach (Auth::user()->user_permission as $per)
                                             @if($per->per_id == '11')
                                             <span class="pull-right-container">
-                                                <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a href="#" class="tire_edit" id="{{$tt->tyre_id}}" ><i class="glyphicon glyphicon-pencil"></i></a>
                                             </span>
                                             @endif
                                             @endforeach
@@ -81,7 +81,7 @@
                                             @foreach (Auth::user()->user_permission as $per)
                                             @if($per->per_id == '12')
                                             <span class="pull-right-container">
-                                                <a href="" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                                <a class="delete_tire" id="{{$tt->tyre_id}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
                                             @endif
                                             @endforeach
@@ -92,6 +92,72 @@
                             </table>
                             @endif
                         </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModalHorizontal_three" tabindex="-1" role="dialog"
+                        aria-labelledby="myModalLabel" aria-hidden="true">
+                       <div class="modal-dialog">
+                           <div class="modal-content">
+                               <!-- Modal Header -->
+                               <div class="modal-header">
+                                   <button type="button" class="close"
+                                           data-dismiss="modal">
+                                       <span aria-hidden="true">&times;</span>
+                                       <span class="sr-only">Close</span>
+                                   </button>
+                                   <h4 class="modal-title" id="myModalLabel" align="center">
+                                       Edit Tires
+                                   </h4>
+                               </div>
+                               <!-- Modal Body -->
+                               <div class="modal-body">
+
+                                   <form class="form-horizontal_three" method="post" id="tire_form" role="form">
+                                       @csrf
+                                       <div class="form-group">
+                                            <label  class="col-sm-4 control-label"
+                                                    for="cat_name">Tyre size</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="t_size" name="t_size" placeholder="Enter Tire Size"/>
+                                            </div>
+                                        </div>
+                                       <div class="form-group">
+                                            <label  class="col-sm-4 control-label"
+                                                    for="sub_cat_name">Manufacturer</label>
+                                            <div class="col-sm-6">
+                                                <select id="manufacturer" name="manufacturer" class="form-control">
+                                                    <option value="0">SELECT MANUFACTURER</option>
+                                                    <option value="1">JK</option>
+                                                    <option value="2">MRF</option>
+                                                    <option value="3">CEAT</option>
+                                                    <option value="4">XCEED</option>
+                                                    <option value="5">YOKOHAMA</option>
+                                                </select> 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  class="col-sm-4 control-label"
+                                                    for="cat_name">Tyre Name</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Tire Name"/>
+                                                <input type="hidden" id="tire_id" name="tire_id" value="" />
+                                            </div>
+                                        </div>
+                                        
+                                   </form>
+                               </div>
+                               <!-- Modal Footer -->
+                               <div class="modal-footer">
+                                   <button type="button" class="btn btn-default"
+                                           data-dismiss="modal">
+                                       Close
+                                   </button>
+                                   <input id="tag-form-submit_three" type="submit" class="btn btn-primary" value="Submit">
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <!-- /modals -->
+
                         <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                             @include('flash-message')
                             <div style="padding-right:20px;text-align:right">
@@ -174,7 +240,7 @@
                                             @foreach (Auth::user()->user_permission as $per)
                                             @if($per->per_id == '15')
                                             <span class="pull-right-container">
-                                            <a class="delete_record" id="{{$cat->cat_id}}" ><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                            <a class="delete_record" id="{{$cat->cat_id}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
                                             @endif
                                             @endforeach
@@ -262,7 +328,7 @@
                                 <tbody>
                                     @foreach ($beltSubCat as $subcat)
                                     <tr id="{{$subcat->sub_cat_id}}">
-                                        <td>{{$subcat->belt_category->cat_name}}</td>
+                                        <td>{{$subcat->belt_category?$subcat->belt_category->cat_name:''}}</td>
                                         <td>{{$subcat->sub_cat_name}}</td>
                                         <td style="text-align: center;cursor: pointer">
                                             @foreach (Auth::user()->user_permission as $per)
@@ -277,7 +343,7 @@
                                             @foreach (Auth::user()->user_permission as $per)
                                             @if($per->per_id == '18')
                                             <span class="pull-right-container">
-                                            <a class="delete_record" id="{{$subcat->sub_cat_id}}" ><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                            <a class="delete_sub_cat" id="{{$subcat->sub_cat_id}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                             </span>
                                             @endif
                                             @endforeach
@@ -399,10 +465,10 @@
                                                     var id = $(this).attr('id');
                                                     $.ajax({
                                                         type: "GET",
-                                                        url: 'delete_tyer/'+id,
+                                                        url: 'delete_category/'+id,
                                                         success: function (data) {
                                                             console.log(data);
-                                                            $(this).closest( "tr" ).remove();
+                                                            $(this).closest( "tr").remove();
                                                         },
                                                         error: function () {
                                                             alert('Error');
@@ -410,6 +476,41 @@
                                                     });
                                                 });
                                                 /*END OF DELETE CATEGORY*/
+
+                                                /*DELETE SUB CATEGORY*/
+                                                $('.delete_sub_cat').click(function() {
+                                                    var id = $(this).attr('id');
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: 'delete_sub_category/'+id,
+                                                        success: function (data) {
+                                                            console.log(data);
+                                                            $(this).closest("tr").remove();
+                                                        },
+                                                        error: function () {
+                                                            alert('Error');
+                                                        }
+                                                    });
+                                                });
+                                                /*END OF DELETE SUB CATEGORY*/
+
+                                                /*DELETE TIRE*/
+                                                $('.delete_tire').click(function() {
+                                                    var id = $(this).attr('id');
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: 'delete_tire/'+id,
+                                                        success: function (data) {
+                                                            console.log(data);
+                                                            $(this).closest("tr").remove();
+                                                        },
+                                                        error: function () {
+                                                            alert('Error');
+                                                        }
+                                                    });
+                                                });
+                                                /*END DELETE*/
+
                                                 /*SUB CATEGORY REGISTRATION AND UPDATE*/
                                         $('#tag-form-submit_two').on('click', function (e) {
                                             e.preventDefault();
@@ -484,6 +585,7 @@
                                                             success: function (data) {
                                                                 console.log(data);
                                                                 $('#myModalHorizontal_two').modal('show');
+                                                                $('#catogory_id').val(data.cat_id);
                                                                 $('#sub_cat_name').val(data.sub_cat_name);
                                                                 $('#sub_cat_id').val(data.sub_cat_id);
                                                             }
@@ -491,6 +593,54 @@
                                                 });
                                                 /*END OF EDIT SUB CATEGORY*/
 
+                                                /* EDIT TYRES*/
+                                                $(".tire_edit").click(function() {
+                                                    var id = $(this).attr('id');
+                                                    $.ajaxSetup({
+                                                        headers: {
+                                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                        }
+                                                    });
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: '/tyres/tire_edit',
+                                                        data: {
+                                                            id: id
+                                                        },
+                                                        success: function (data) {
+                                                            console.log(data);
+                                                            $('#myModalHorizontal_three').modal('show');
+                                                            $('#t_size').val(data.tyre_size);
+                                                            $('#manufacturer').val(data.manufac_id);
+                                                            $('#name').val(data.tyre_name);
+                                                            $('#tire_id').val(data.tyre_id);
+                                                        }
+                                                    });
+                                                    
+                                                });
+
+                                                $('#tag-form-submit_three').on('click', function (e) {
+                                                e.preventDefault();
+                                                $.ajax({
+                                                        type: "POST",
+                                                        url: "/update_tires",
+                                                        data: {
+                                                            "_token": "{{ csrf_token() }}",
+                                                            tire_id : $('#tire_id').val(),
+                                                            name : $('#name').val(),
+                                                            manufacturer: $('#manufacturer').val(),
+                                                            t_size: $('#t_size').val()
+                                                        },
+                                                        success: function (data) {
+                                                            console.log(data);
+                                                        },
+                                                        error: function () {
+                                                            alert('Error');
+                                                        }
+                                                    });
+                                                    $('#myModalHorizontal_three').modal('toggle');
+                                                    return false;
+                                                });
 
 </script>
 @endsection

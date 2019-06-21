@@ -68,7 +68,7 @@
                                     @foreach (Auth::user()->user_permission as $per)
                                     @if($per->per_id == '21')
                                     <span class="pull-right-container">
-                                        <a href=""><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a href="{{url('edit_price', $values->price_id)}}"><i class="glyphicon glyphicon-pencil"></i></a> 
                                     </span>
                                     @endif
                                     @endforeach
@@ -77,7 +77,7 @@
                                     @foreach (Auth::user()->user_permission as $per)
                                     @if($per->per_id == '22')
                                     <span class="pull-right-container">
-                                        <a href="" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
+                                        <a href="{{url('delete_price/'.$values->price_id)}}" data-method="delete"><i class="glyphicon glyphicon-trash"  style="color:red"></i></a>
                                     </span>
                                     @endif
                                     @endforeach

@@ -113,7 +113,7 @@ class UserController extends Controller {
                     'u_type' => 'required|not_in:0',
                     'nic' => 'required',
                     'telephone' => 'required',
-                    'password' => 'string|min:6|confirmed',
+                    // 'password' => 'string|min:6|confirmed',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)

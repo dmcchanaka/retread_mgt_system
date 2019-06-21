@@ -6,6 +6,7 @@ use App\Belt_price;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use App\Tyre;
 use App\Belt_category;
 use App\Belt_subcategory;
@@ -133,7 +134,11 @@ class Belt_priceController extends Controller
      */
     public function show($id)
     {
-//
+        $price = Belt_price::with('tyre','category','subcategory')->find($id);
+        $category = Belt_category::get();
+        $subCategory = Belt_subcategory::get();
+        $tires = Tyre::get();
+        return view('prices.edit_price', ['price' => $price,'category' => $category,'subCategory' => $subCategory,'tires' => $tires]);
     }
 
     /**
@@ -156,7 +161,26 @@ class Belt_priceController extends Controller
      */
     public function update(Request $request, $id)
     {
-//
+        $validator = Validator::make($request->all(), [
+            'tyre_id' => 'required|not_in:0',
+            'cat_id' => 'required|not_in:0',
+            'sub_cat_id' => 'required|not_in:0',
+            'rp_price' => 'required',
+            'cus_price' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)
+                            ->withInput();
+        }
+
+        $price = Belt_price::find($id);
+        $price->tyre_id = $request->get('tyre_id');
+        $price->cat_id = $request->get('cat_id');
+        $price->sub_cat_id = $request->get('sub_cat_id');
+        $price->rp_price = $request->get('rp_price');
+        $price->cus_price = $request->get('cus_price');
+        $price->save();
+        return redirect()->route('view_prices')->with('success', 'RECORD HAS BEEN SUCCESSFULLY UPDATED!');
     }
 
     /**
@@ -167,7 +191,8 @@ class Belt_priceController extends Controller
      */
     public function destroy($id)
     {
-//
+        Belt_price::find($id)->delete();
+        return redirect()->route('view_prices')->with('success', 'RECORD HAS BEEN SUCCESSFULLY DELETED!');
     }
 
 }

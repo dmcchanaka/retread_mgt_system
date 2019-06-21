@@ -10,10 +10,10 @@
 
         <div class="title_right">
             <div class="col-md-offset-6">
-                <div class="input-group">
+                <div class="input-group" style="padding-right:10px">
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">User Management</a></li>
+                        <li><a href="#">User</a></li>
                         <li class="active">Registration</li>
                     </ol>
                 </div>
@@ -146,7 +146,7 @@
                         <div class="form-group">
                             <label for="password" class="col-sm-3 col-form-label">Password</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="password" type="text" name="password" placeholder="Password" class="form-control col-md-7 col-xs-12" type="text">
+                                <input id="password" type="password" name="password" placeholder="Password" class="form-control col-md-7 col-xs-12" type="text">
                                 @if ($errors->has('password'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('password') }}</strong>
@@ -157,7 +157,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 col-form-label">Confirm Password</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="password_confirmation" type="text" id="password-confirm" placeholder="Password" class="form-control col-md-7 col-xs-12" type="text">
+                                <input name="password_confirmation" type="password" id="password-confirm" placeholder="Password" class="form-control col-md-7 col-xs-12" type="text">
                             </div>
                         </div>
                         <div class="" style="padding-bottom: 16px">

@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('customers', 'CustomerController@index'); //Load customer view
     Route::post('add_customers', 'CustomerController@store'); //Register new customers
     Route::post('update_customer/{id}', 'CustomerController@update'); //Update customer
-    Route::resource('edit_customer', 'CustomerController'); //Edit customer view
+    Route::get('edit_customer/{id}', 'CustomerController@show'); //Edit customer view
     Route::get('delete_customer/{id}', 'CustomerController@destroy'); //Delete customer
     Route::get('view_customers', 'CustomerController@customer_view')->name('view_customer'); //View Added customers
 
@@ -43,11 +43,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add_category', 'TyreController@storeCategory'); //view Added categories
     Route::get('/tyres/edit', 'TyreController@show');
     Route::post('update_category', 'TyreController@updateCategory');
-    Route::get('delete_tyer/{id}', 'TyreController@destroy');
+    Route::get('delete_category/{id}', 'TyreController@destroy');
+    Route::get('delete_sub_category/{id}', 'TyreController@destroySubCategory');
+    Route::get('delete_tire/{id}', 'TyreController@destroyTire');
     // sub catogory add
     Route::post('add_subcatogory', 'TyreController@addSubcatogory');
     Route::get('tyres/sub_cat_edit', 'TyreController@showSubcatogory');
     Route::post('update_sub_category', 'TyreController@updateSubCategory');
+
+    Route::get('tyres/tire_edit', 'TyreController@showTires');
+    Route::post('update_tires', 'TyreController@updateTires');
 
     Route::get('prices', 'Belt_priceController@index'); //Load price view
     Route::get('/tyres/find', 'Belt_priceController@search_products'); //auto complete get tyres
@@ -56,6 +61,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/price/beltno', 'Belt_priceController@gen_beltno'); //gen belt no
     Route::post('add_prices', 'Belt_priceController@store'); //Register new prices
     Route::get('view_prices', 'Belt_priceController@create')->name('view_prices'); // View Added Prices
+    Route::get('edit_price/{id}', 'Belt_priceController@show'); //Edit price view
+    Route::post('update_price/{id}', 'Belt_priceController@update'); //Update price
+    Route::get('delete_price/{id}', 'Belt_priceController@destroy'); //Delete Users
 
     Route::get('orders', 'TyreordersController@index'); // Load tyre orders view
     Route::get('orders/generate_no', 'TyreordersController@gen_order_no'); //Generate Order No

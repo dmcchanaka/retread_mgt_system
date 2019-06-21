@@ -29,7 +29,7 @@
                 </div>
                 <div class="x_content">
                     <br />
-                    <form id="demo-form2" action="{{url('update_customer/'.$cust->id)}}" method="post" class="form-horizontal form-label-left">
+                    <form id="demo-form2" action="{{url('update_customer/'.$cust->cus_id)}}" method="post" class="form-horizontal form-label-left">
                         @csrf
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Name <span class="required"></span>
@@ -43,7 +43,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div class="btn-group" data-toggle="buttons">
@@ -59,7 +59,7 @@
                                     @endif
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nic">NIC <span class="required"></span>
                             </label>
@@ -76,7 +76,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Mobile No <span class="required"></span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="telephone" name="telephone" type="text" placeholder="Mobile No" required="required" value="{{$cust->telephone}}" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }} col-md-7 col-xs-12">
+                                <input id="telephone" name="telephone" type="text" placeholder="Mobile No" required="required" value="{{$cust->mobile_no}}" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }} col-md-7 col-xs-12">
                                 @if ($errors->has('telephone'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('telephone') }}</strong>

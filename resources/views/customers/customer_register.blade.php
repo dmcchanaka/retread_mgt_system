@@ -66,7 +66,7 @@
                                     </span>
                                     @endif
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="examplegender">Gender</label>
                                     <select class="form-control" id="gender" name="gender">
                                         <option value="0">Select Gender</option>
@@ -78,7 +78,7 @@
                                         <strong>{{ $errors->first('gender') }}</strong>
                                     </span>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="exampleInputAddress">Address</label>
                                     <textarea id="address" name="address" class="form-control" placeholder="Address"></textarea>
